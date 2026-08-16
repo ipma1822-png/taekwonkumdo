@@ -78,3 +78,23 @@
   .tk-core-logo{width:170px;height:170px}
   .wtkf-showcase-logo{align-items:flex-start;flex-direction:column}
 }
+
+
+/* ===== v2.2 ALL SUBPAGES BRAND UNIFICATION ===== */
+.page-brand-seal{
+  display:flex;align-items:center;gap:14px;width:max-content;max-width:100%;
+  margin-bottom:22px;padding:10px 14px 10px 10px;border-radius:999px;
+  border:1px solid rgba(215,179,91,.26);background:rgba(215,179,91,.055)
+}
+.page-brand-seal img{
+  width:54px;height:54px;border-radius:50%;object-fit:cover;
+  border:1px solid rgba(215,179,91,.58);background:#050505
+}
+.page-brand-seal span{display:block;color:#d7b35b;font-size:9px;font-weight:900;letter-spacing:.12em}
+.page-brand-seal b{display:block;color:#eaf2f8;font-size:12px;margin-top:3px}
+.page-head{position:relative}
+.nav-item>a.active{background:rgba(215,179,91,.10)!important;color:#fff!important;border-color:rgba(215,179,91,.25)}
+@media(max-width:650px){
+  .page-brand-seal{border-radius:18px;width:100%}
+  .page-brand-seal img{width:46px;height:46px}
+}
