@@ -1,1 +1,63 @@
-(()=>{document.querySelectorAll('[data-year]').forEach(e=>e.textContent=new Date().getFullYear());const t=document.querySelector('[data-nav-toggle]'),n=document.querySelector('.nav');if(t&&n)t.onclick=()=>{n.classList.toggle('mobile-open');t.textContent=n.classList.contains('mobile-open')?'✕':'☰'};const h=document.querySelector('.topbar');if(h&&n){let d=location.pathname.split('/').filter(Boolean).length>1?'../':'./',m=document.createElement('div');m.className='tkg-mega';m.innerHTML=`<div class="mega-grid"><div class="mega-intro"><span class="kicker">WORLD TAEKWON-GEOMDO FEDERATION</span><b>태권검도 공식 플랫폼</b><p>창시철학 · 교차원리 · 교육 · 지도자 · 지부 · 교본 · 미디어 · 공식 조회를 하나의 체계로 연결합니다.</p><a class="btn primary small" href="${d}program/">교육 프로그램 →</a></div><div class="mega-col"><h4>연맹</h4><a href="${d}about/">연맹소개</a><a href="${d}philosophy/">창시철학 · 교차원리</a><a href="${d}masters/">임원 · 지도자</a><a href="${d}branches/">국내외 지부</a></div><div class="mega-col"><h4>교육</h4><a href="${d}program/">태권검도 프로그램</a><a href="${d}resources/">교본 · 공식자료</a><a href="${d}media/">영상 · 미디어</a><a href="${d}program/">지도자 과정</a></div><div class="mega-col"><h4>공식 시스템</h4><a href="${d}verification/">단증 · 자격 조회</a><a href="${d}verification/">지도자 조회</a><a href="${d}branches/">공식 지부</a><a href="${d}contact/">신청 · 문의</a></div><div class="mega-col"><h4>바로가기</h4><a href="${d}resources/">공식 자료실</a><a href="${d}media/">태권검도 미디어</a><a href="${d}contact/">지도자 · 지부 신청</a><a href="${d}">메인으로</a></div></div><div class="mega-bottom"><span>TAEKWON-GEOMDO · DISCIPLINE · RESPECT · HARMONY</span><span>태권도와 검도의 장점을 아우르는 신개념 무도·스포츠</span></div>`;document.body.appendChild(m);let q;const o=()=>{if(innerWidth>1050){clearTimeout(q);m.classList.add('open')}},c=()=>q=setTimeout(()=>m.classList.remove('open'),120);n.onmouseenter=o;n.onmouseleave=c;m.onmouseenter=()=>clearTimeout(q);m.onmouseleave=c}const net=document.querySelector('.tk-network');if(net){[[8,18,14],[18,69,-18],[31,32,24],[42,82,-26],[53,15,12],[64,63,32],[77,26,-12],[88,74,18],[93,13,-32]].forEach(([x,y,r],i)=>{let e=document.createElement('i');e.style.left=x+'%';e.style.top=y+'%';e.style.setProperty('--r',r+'deg');e.style.animationDelay=i*.25+'s';net.appendChild(e)})}})();
+
+(() => {
+  document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
+
+  const nav = document.querySelector('.nav');
+  const toggle = document.querySelector('[data-nav-toggle]');
+
+  if(toggle && nav){
+    toggle.addEventListener('click', () => {
+      nav.classList.toggle('mobile-open');
+      toggle.textContent = nav.classList.contains('mobile-open') ? '✕' : '☰';
+      if(!nav.classList.contains('mobile-open')){
+        nav.querySelectorAll('.mobile-open-item').forEach(x=>x.classList.remove('mobile-open-item'));
+      }
+    });
+  }
+
+  // Mobile: click top menu to show its own submenu.
+  document.querySelectorAll('.nav-item > a').forEach(a=>{
+    a.addEventListener('click', e=>{
+      if(innerWidth <= 1050 && nav?.classList.contains('mobile-open')){
+        const item = a.parentElement;
+        const dd = item?.querySelector(':scope > .nav-dropdown');
+        if(dd){
+          e.preventDefault();
+          const was = item.classList.contains('mobile-open-item');
+          nav.querySelectorAll('.mobile-open-item').forEach(x=>x.classList.remove('mobile-open-item'));
+          if(!was) item.classList.add('mobile-open-item');
+        }
+      }
+    });
+  });
+
+  // Progressive reveal
+  const items = document.querySelectorAll('.card,.mini,.tk-feature,.year,.hq-panel,.doc,.banner,.wtkf-showcase');
+  if('IntersectionObserver' in window){
+    items.forEach(el => {
+      el.style.opacity='0'; el.style.transform='translateY(15px)';
+      el.style.transition='opacity .55s ease, transform .55s ease';
+    });
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; io.unobserve(e.target);
+      }
+    }), {threshold:.08});
+    items.forEach(el => io.observe(el));
+  }
+
+  // Hero network points
+  const net = document.querySelector('.tk-network');
+  if(net && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const positions = [
+      [8,18,14],[18,69,-18],[31,32,24],[42,82,-26],[53,15,12],[64,63,32],
+      [77,26,-12],[88,74,18],[93,13,-32],[12,86,-8],[71,88,8],[38,10,-30]
+    ];
+    positions.forEach(([x,y,r],i)=>{
+      const dot=document.createElement('i');
+      dot.style.left=x+'%';dot.style.top=y+'%';
+      dot.style.setProperty('--r',r+'deg');dot.style.animationDelay=(i*.23)+'s';
+      net.appendChild(dot);
+    });
+  }
+})();
