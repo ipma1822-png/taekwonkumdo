@@ -61,3 +61,35 @@
     });
   }
 })();
+
+
+// Official video thumbnail viewer
+(function(){
+  function ensureModal(){
+    let modal=document.querySelector('.wtkf-video-modal');
+    if(modal) return modal;
+    modal=document.createElement('div');
+    modal.className='wtkf-video-modal';
+    modal.setAttribute('aria-hidden','true');
+    modal.innerHTML='<div class="wtkf-video-modal-box" role="dialog" aria-modal="true" aria-label="태권검도 영상"><button class="wtkf-video-modal-close" type="button" aria-label="영상 닫기">×</button><div class="wtkf-video-modal-frame"></div><div class="wtkf-video-modal-title"></div></div>';
+    document.body.appendChild(modal);
+    function close(){
+      modal.classList.remove('is-open'); modal.setAttribute('aria-hidden','true');
+      modal.querySelector('.wtkf-video-modal-frame').innerHTML='';
+      document.body.classList.remove('video-modal-open');
+    }
+    modal.querySelector('.wtkf-video-modal-close').addEventListener('click',close);
+    modal.addEventListener('click',function(e){ if(e.target===modal) close(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape' && modal.classList.contains('is-open')) close(); });
+    return modal;
+  }
+  document.addEventListener('click',function(e){
+    const btn=e.target.closest('.video-thumb-button'); if(!btn) return;
+    const id=btn.getAttribute('data-video-id'); if(!id) return;
+    const title=btn.getAttribute('data-video-title')||'태권검도 영상';
+    const modal=ensureModal();
+    modal.querySelector('.wtkf-video-modal-frame').innerHTML='<iframe src="https://www.youtube.com/embed/'+encodeURIComponent(id)+'?autoplay=1&rel=0" title="'+title.replace(/"/g,'&quot;')+'" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+    modal.querySelector('.wtkf-video-modal-title').textContent=title;
+    modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false'); document.body.classList.add('video-modal-open');
+  });
+})();
