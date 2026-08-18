@@ -1,43 +1,8 @@
-<!doctype html>
-<html lang="ko"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>통합회원 로그인 | WTKF</title>
-<style>
-:root{--bg:#071426;--panel:#0d1d33;--line:rgba(255,255,255,.12);--gold:#d8b15a;--text:#eef4ff;--muted:#aebbd1;--ok:#68dc9a;--bad:#ff8b8b;--work:#f0cc74}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;background:linear-gradient(180deg,#061221,#0a1930);color:var(--text)}
-.wrap{width:min(760px,calc(100% - 30px));margin:auto;padding:34px 0 70px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
-.brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit}.mark{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--gold) 55%,transparent);background:rgba(216,177,90,.10);color:var(--gold);font-weight:900}
-.brand b{display:block}.brand small{display:block;color:var(--muted);margin-top:2px}.home{color:#fff;text-decoration:none;border:1px solid var(--line);padding:9px 12px;border-radius:10px}
-.card{background:rgba(13,29,51,.96);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:0 22px 60px rgba(0,0,0,.28)}
-.eyebrow{color:var(--gold);font-size:12px;font-weight:900;letter-spacing:.08em}h1{margin:7px 0 8px;font-size:30px}.lead{margin:0 0 20px;color:var(--muted);line-height:1.65}
-.rule{padding:12px 14px;border-radius:12px;background:rgba(216,177,90,.08);border:1px solid rgba(216,177,90,.28);margin-bottom:18px;font-size:13px;line-height:1.65}
-.field{display:grid;gap:7px;margin:13px 0}.field label{font-weight:800}.field input{width:100%;padding:13px;border:1px solid var(--line);border-radius:11px;background:#08162a;color:#fff;font:inherit}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:11px;padding:13px 18px;background:linear-gradient(135deg,var(--gold),#987328);color:#fff;font-weight:900;font-size:15px;cursor:pointer;text-decoration:none}
-.btn.secondary{background:#172942;border:1px solid var(--line)}.status{font-weight:800;min-height:22px}.ok{color:var(--ok)}.bad{color:var(--bad)}.work{color:var(--work)}
-.note{margin-top:18px;padding:13px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03);color:var(--muted);font-size:13px;line-height:1.65}
-</style></head><body>
-<div class="wrap">
-<div class="top"><a class="brand" href="../"><span class="mark">WTKF</span><span><b>세계태권검도연맹</b><small>World Taekwon-Geumdo Federation</small></span></a><a class="home" href="../">WTKF 홈</a></div>
-<section class="card">
-<div class="eyebrow">ONE ACCOUNT · 원 어카운트</div>
-<h1>통합회원 로그인</h1>
-<p class="lead">ACTS 통합회원센터에서 만든 <b>같은 이메일·같은 비밀번호</b>를 사용합니다.</p>
-<div class="rule"><b>기억할 것은 하나뿐입니다.</b><br>통합회원 계정은 하나이며, WTKF에서는 교육·활동기록을 위해 이 사이트에서 한 번 로그인합니다.</div>
-<form id="loginForm">
-<div class="field"><label>이메일</label><input name="email" type="email" required autocomplete="email"></div>
-<div class="field"><label>비밀번호</label><input name="password" type="password" required autocomplete="current-password"></div>
-<div class="row"><button class="btn" id="loginBtn" type="submit">통합회원 로그인</button><a class="btn secondary" href="https://acts.pe.kr/member-center/signup.html">처음 회원가입</a><span id="status" class="status"></span></div>
-</form>
-<div class="note">로그인 성공 후 자동으로 WTKF 페이지로 이동합니다. 회원정보 전체 확인은 ACTS <a href="https://acts.pe.kr/member-center/mypage.html" style="color:var(--gold)">MY PAGE</a>에서 할 수 있습니다.</div>
-</section></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const db=supabase.createClient('https://ojxarsfaewehwjidwgac.supabase.co','sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0');
-const form=document.getElementById('loginForm'),btn=document.getElementById('loginBtn'),st=document.getElementById('status');
-const setStatus=(m,c='')=>{st.textContent=m;st.className='status '+c};
-(async()=>{const {data}=await db.auth.getSession();if(data.session){setStatus('이미 로그인되어 있습니다.','ok');setTimeout(()=>location.href='../',650)}})();
-form.addEventListener('submit',async e=>{e.preventDefault();btn.disabled=true;setStatus('로그인 중...','work');const fd=new FormData(form);
-const {error}=await db.auth.signInWithPassword({email:String(fd.get('email')||'').trim(),password:String(fd.get('password')||'')});
-if(error){setStatus('이메일 또는 비밀번호를 확인해 주세요.','bad');btn.disabled=false;return}
-setStatus('로그인 성공! 이동합니다.','ok');setTimeout(()=>location.href='../',650);});
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>통합회원 로그인 | WTKF</title>
+<style>body{margin:0;background:#071426;color:#eef4ff;font-family:system-ui,"Noto Sans KR",sans-serif}.w{width:min(720px,calc(100% - 30px));margin:50px auto}.c{background:#0d1d33;border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:26px}h1{color:#d7b35a}label{display:grid;gap:7px;margin:14px 0;font-weight:800}input{padding:13px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#08162a;color:#fff;font:inherit}button,a{display:inline-block;padding:12px 16px;border-radius:10px;border:0;background:#d7b35a;color:#111;font-weight:900;text-decoration:none;margin-right:8px;cursor:pointer}a{background:#172942;color:#fff;border:1px solid rgba(255,255,255,.12)}#s{margin-top:14px;font-weight:800}</style></head><body><div class="w"><div class="c"><h1>WTKF 통합회원 로그인</h1><p>ACTS 통합회원센터에서 만든 <b>같은 이메일·같은 비밀번호</b>를 사용합니다.</p><form id="f"><label>이메일<input name="email" type="email" required></label><label>비밀번호<input name="password" type="password" required></label><button>통합회원 로그인</button><a href="https://acts.pe.kr/member-center/signup.html">처음 회원가입</a><div id="s"></div></form></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+const db=supabase.createClient('https://ojxarsfaewehwjidwgac.supabase.co','sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0'),f=document.getElementById('f'),s=document.getElementById('s');
+const q=new URLSearchParams(location.search),r=q.get('return');const target=(r&&r.startsWith('/')&&!r.startsWith('//'))?r:'../media/';
+(async()=>{const {data}=await db.auth.getSession();if(data.session)location.href=target})();
+f.onsubmit=async e=>{e.preventDefault();s.textContent='로그인 중...';const d=new FormData(f),{error}=await db.auth.signInWithPassword({email:String(d.get('email')).trim(),password:String(d.get('password'))});if(error){s.textContent='이메일 또는 비밀번호를 확인해 주세요.';return}s.textContent='로그인 성공';setTimeout(()=>location.href=target,400)};
 </script></body></html>
