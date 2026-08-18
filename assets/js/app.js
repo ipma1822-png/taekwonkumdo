@@ -93,3 +93,22 @@
     modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false'); document.body.classList.add('video-modal-open');
   });
 })();
+
+// WTKF member application link: add to the sitewide 신청·문의 dropdown.
+(function(){
+  const brand = document.querySelector('.brand');
+  const root = brand ? (brand.getAttribute('href') || './') : './';
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const top = item.querySelector(':scope > a');
+    const dd = item.querySelector(':scope > .nav-dropdown');
+    if(!top || !dd || !top.textContent.includes('신청·문의')) return;
+    if(dd.querySelector('[data-wtkf-member-link]')) return;
+    const link = document.createElement('a');
+    link.href = root + 'member/';
+    link.textContent = '회원가입';
+    link.setAttribute('data-wtkf-member-link','');
+    const title = dd.querySelector('.drop-title');
+    if(title && title.nextSibling) dd.insertBefore(link, title.nextSibling);
+    else dd.appendChild(link);
+  });
+})();
