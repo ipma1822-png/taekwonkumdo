@@ -5,4 +5,5 @@ const db=supabase.createClient('https://ojxarsfaewehwjidwgac.supabase.co','sb_pu
 const q=new URLSearchParams(location.search),r=q.get('return');const target=(r&&r.startsWith('/')&&!r.startsWith('//'))?r:'../media/';
 (async()=>{const {data}=await db.auth.getSession();if(data.session)location.href=target})();
 f.onsubmit=async e=>{e.preventDefault();s.textContent='로그인 중...';const d=new FormData(f),{error}=await db.auth.signInWithPassword({email:String(d.get('email')).trim(),password:String(d.get('password'))});if(error){s.textContent='이메일 또는 비밀번호를 확인해 주세요.';return}s.textContent='로그인 성공';setTimeout(()=>location.href=target,400)};
-</script></body></html>
+</script><script src="../assets/js/cross-site-network.js"></script>
+</body></html>
