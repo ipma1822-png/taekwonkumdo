@@ -28,6 +28,8 @@ const f=document.getElementById('f'),s=document.getElementById('s'),sendBtn=docu
 const q=new URLSearchParams(location.search),r=q.get('return');
 const target=(r&&r.startsWith('/')&&!r.startsWith('//'))?r:'/taekwonkumdo/media/#wtkf-learning';
 const targetUrl=new URL(target,location.origin).href;
+const callbackUrl=new URL('/taekwonkumdo/auth-callback/',location.origin);
+callbackUrl.searchParams.set('return', target);
 
 (async()=>{
   const {data}=await db.auth.getSession();
@@ -42,7 +44,7 @@ f.onsubmit=async e=>{
   s.textContent='인증 메일을 보내고 있습니다...';
   const {error}=await db.auth.signInWithOtp({
     email,
-    options:{emailRedirectTo:targetUrl,shouldCreateUser:false}
+    options:{emailRedirectTo:callbackUrl.href,shouldCreateUser:false}
   });
   if(error){
     console.error(error);
