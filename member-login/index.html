@@ -1,9 +1,60 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>통합회원 로그인 | WTKF</title>
-<style>body{margin:0;background:#071426;color:#eef4ff;font-family:system-ui,"Noto Sans KR",sans-serif}.w{width:min(720px,calc(100% - 30px));margin:50px auto}.c{background:#0d1d33;border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:26px}h1{color:#d7b35a}label{display:grid;gap:7px;margin:14px 0;font-weight:800}input{padding:13px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#08162a;color:#fff;font:inherit}button,a{display:inline-block;padding:12px 16px;border-radius:10px;border:0;background:#d7b35a;color:#111;font-weight:900;text-decoration:none;margin-right:8px;cursor:pointer}a{background:#172942;color:#fff;border:1px solid rgba(255,255,255,.12)}#s{margin-top:14px;font-weight:800}</style></head><body><div class="w"><div class="c"><h1>WTKF 통합회원 로그인</h1><p>ACTS 통합회원센터에서 만든 <b>같은 이메일·같은 비밀번호</b>를 사용합니다.</p><form id="f"><label>이메일<input name="email" type="email" required></label><label>비밀번호<input name="password" type="password" required></label><button>통합회원 로그인</button><a href="https://acts.pe.kr/member-center/signup.html">처음 회원가입</a><div id="s"></div></form></div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-const db=supabase.createClient('https://ojxarsfaewehwjidwgac.supabase.co','sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0'),f=document.getElementById('f'),s=document.getElementById('s');
-const q=new URLSearchParams(location.search),r=q.get('return');const target=(r&&r.startsWith('/')&&!r.startsWith('//'))?r:'../media/';
-(async()=>{const {data}=await db.auth.getSession();if(data.session)location.href=target})();
-f.onsubmit=async e=>{e.preventDefault();s.textContent='로그인 중...';const d=new FormData(f),{error}=await db.auth.signInWithPassword({email:String(d.get('email')).trim(),password:String(d.get('password'))});if(error){s.textContent='이메일 또는 비밀번호를 확인해 주세요.';return}s.textContent='로그인 성공';setTimeout(()=>location.href=target,400)};
-</script><script src="../assets/js/cross-site-network.js"></script>
-</body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>통합회원 로그인 | WTKF</title>
+<style>
+:root{--bg:#071426;--panel:#0d1d33;--field:#08162a;--gold:#d7b35a;--text:#eef4ff;--muted:#aebcd1;--line:rgba(255,255,255,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,"Noto Sans KR",sans-serif}.w{width:min(720px,calc(100% - 30px));margin:50px auto}.c{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:0 20px 50px rgba(0,0,0,.22)}h1{margin-top:0;color:var(--gold)}p{line-height:1.65;color:var(--muted)}.notice{padding:12px 14px;border-radius:12px;background:rgba(215,179,90,.08);border:1px solid rgba(215,179,90,.28);color:#f1dfaa;font-size:14px}label{display:grid;gap:7px;margin:16px 0 14px;font-weight:800}input{width:100%;padding:13px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:#fff;font:inherit}input:focus{outline:2px solid rgba(215,179,90,.4);border-color:var(--gold)}.actions{display:flex;gap:8px;flex-wrap:wrap}button,a.btn{display:inline-block;padding:12px 16px;border-radius:10px;border:0;background:var(--gold);color:#111;font-weight:900;text-decoration:none;cursor:pointer;font:inherit}a.btn.secondary{background:#172942;color:#fff;border:1px solid var(--line)}button:disabled{opacity:.6;cursor:wait}#s{margin-top:14px;font-weight:800;line-height:1.55}.small{margin-top:16px;font-size:12px;color:#8293ab}
+</style>
+</head>
+<body>
+<div class="w"><div class="c">
+<h1>WTKF 통합회원 로그인</h1>
+<p>비밀번호 없이 <b>이메일 인증</b>으로 로그인합니다. 회원가입 때 사용한 이메일을 입력하면 인증 메일이 발송됩니다.</p>
+<div class="notice">① 이메일 입력 → ② 인증 메일 받기 → ③ 메일의 로그인 링크 누르기 → ④ 태권검도 학습관으로 자동 복귀</div>
+<form id="f">
+<label>이메일<input id="email" name="email" type="email" autocomplete="email" placeholder="example@email.com" required></label>
+<div class="actions"><button id="sendBtn" type="submit">인증 메일 받기</button><a class="btn secondary" href="https://acts.pe.kr/member-center/signup.html">처음 회원가입</a></div>
+<div id="s" role="status" aria-live="polite"></div>
+</form>
+<p class="small">이미 로그인되어 있으면 자동으로 원래 보려던 태권검도 페이지로 이동합니다.</p>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const db=supabase.createClient('https://ojxarsfaewehwjidwgac.supabase.co','sb_publishable_ZoAZrV5rDmYDLxhXlnEXCw_lPqJfin0');
+const f=document.getElementById('f'),s=document.getElementById('s'),sendBtn=document.getElementById('sendBtn');
+const q=new URLSearchParams(location.search),r=q.get('return');
+const target=(r&&r.startsWith('/')&&!r.startsWith('//'))?r:'/taekwonkumdo/media/#wtkf-learning';
+const targetUrl=new URL(target,location.origin).href;
+
+(async()=>{
+  const {data}=await db.auth.getSession();
+  if(data.session) location.replace(targetUrl);
+})();
+
+f.onsubmit=async e=>{
+  e.preventDefault();
+  const email=String(new FormData(f).get('email')||'').trim();
+  if(!email) return;
+  sendBtn.disabled=true;
+  s.textContent='인증 메일을 보내고 있습니다...';
+  const {error}=await db.auth.signInWithOtp({
+    email,
+    options:{emailRedirectTo:targetUrl,shouldCreateUser:false}
+  });
+  if(error){
+    console.error(error);
+    s.textContent='인증 메일을 보내지 못했습니다. 회원가입한 이메일인지 확인한 뒤 다시 시도해 주세요.';
+    sendBtn.disabled=false;
+    return;
+  }
+  s.textContent='인증 메일을 보냈습니다. 받은편지함에서 로그인 링크를 눌러 주세요. 메일이 안 보이면 스팸함도 확인해 주세요.';
+  sendBtn.textContent='인증 메일 다시 받기';
+  sendBtn.disabled=false;
+};
+</script>
+<script src="../assets/js/cross-site-network.js"></script>
+</body>
+</html>
