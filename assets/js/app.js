@@ -5,6 +5,21 @@
   const nav = document.querySelector('.nav');
   const toggle = document.querySelector('[data-nav-toggle]');
 
+  // WTKF v3.2.7: restore the mobile horizontal primary menu without changing
+  // the existing desktop mega menu or hamburger/full-menu behavior.
+  if(nav && !document.querySelector('.wtkf-mobile-primary')){
+    const strip = document.createElement('nav');
+    strip.className = 'wtkf-mobile-primary';
+    strip.setAttribute('aria-label','태권검도 모바일 주요 메뉴');
+    nav.querySelectorAll(':scope > .nav-item > a').forEach(a => {
+      const clone = a.cloneNode(true);
+      clone.classList.remove('pill');
+      strip.appendChild(clone);
+    });
+    const header = document.querySelector('.topbar');
+    if(header) header.insertAdjacentElement('afterend', strip);
+  }
+
   if(toggle && nav){
     toggle.addEventListener('click', () => {
       nav.classList.toggle('mobile-open');
