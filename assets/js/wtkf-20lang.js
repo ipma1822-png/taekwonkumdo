@@ -24,7 +24,7 @@
   function go(code){
     localStorage.setItem('wtkf_lang',code);
     ov.classList.remove('open');
-    if(code==='ko'){ location.href=location.origin+location.pathname+location.search.replace(/([?&])lang=[^&]*&?/,'$1').replace(/[?&]$/,'')+location.hash; return; }
+    document.dispatchEvent(new CustomEvent('wtkf-language-change',{detail:{code:code}}));
   }
   btn.onclick=()=>ov.classList.add('open'); ov.querySelector('.wtkf-lang-close').onclick=()=>ov.classList.remove('open'); ov.onclick=e=>{if(e.target===ov)ov.classList.remove('open')};
   document.body.append(btn,ov);
