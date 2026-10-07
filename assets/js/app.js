@@ -13,6 +13,8 @@
     strip.setAttribute('aria-label','태권검도 모바일 주요 메뉴');
     nav.querySelectorAll(':scope > .nav-item > a').forEach(a => {
       const clone = a.cloneNode(true);
+      const source = a.getAttribute('data-wtkf-source');
+      if(source) clone.setAttribute('data-wtkf-source',source);
       clone.classList.remove('pill');
       strip.appendChild(clone);
     });
