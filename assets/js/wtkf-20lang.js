@@ -29,6 +29,7 @@
   btn.onclick=()=>ov.classList.add('open'); ov.querySelector('.wtkf-lang-close').onclick=()=>ov.classList.remove('open'); ov.onclick=e=>{if(e.target===ov)ov.classList.remove('open')};
   const topbar=document.querySelector('.topbar');
   const existingTopButton=document.getElementById('wtkfTopLanguage');
+  if(existingTopButton)existingTopButton.onclick=()=>ov.classList.add('open');
   if(topbar&&!existingTopButton){
     const topButton=document.createElement('button');
     topButton.type='button'; topButton.className='wtkf-header-language';
