@@ -15,7 +15,7 @@
 <link href="./assets/images/favicon.png" rel="icon"/>
 <link href="./assets/css/style.css?v=3.0" rel="stylesheet"/>
 <script defer="" src="./assets/js/data.js"></script>
-<script defer="" src="./assets/js/app.js?v=3.1"></script>
+<script defer="" src="./assets/js/app.js?v=3.2"></script>
 <!-- JSON-LD -->
 <script type="application/ld+json">
   {
@@ -683,7 +683,9 @@
   const originals=new WeakMap(), rendered=new WeakMap();
   const sourceKeys=new Set(Object.values(I18N).flatMap(entries=>Object.keys(entries).map(normalize)));
   const sourceByTranslation=new Map();
-  const menuSources=new Set(Array.from(document.querySelectorAll('.nav > .nav-item > a'),a=>normalize(a.textContent)));
+  const menuSources=new Set(Array.from(document.querySelectorAll('.nav > .nav-item > a'),a=>{
+    const source=normalize(a.textContent); a.setAttribute('data-wtkf-source',source); return source;
+  }));
   Object.values(I18N).forEach(entries=>Object.entries(entries).forEach(([source,text])=>{
     const key=normalize(text); if(!sourceKeys.has(key)&&(!sourceByTranslation.has(key)||menuSources.has(normalize(source))))sourceByTranslation.set(key,source);
   }));
@@ -693,7 +695,9 @@
   function translateNode(node){
     if(node.nodeType!==Node.TEXT_NODE||!node.parentElement||node.parentElement.closest('script,style,textarea,input,select,.wtkf-lang-grid,.wtkf-item'))return;
     const value=node.nodeValue;
-    if(!originals.has(node)||value!==rendered.get(node)){
+    const mobileSource=node.parentElement.matches('.wtkf-mobile-primary > a[data-wtkf-source]')?node.parentElement.getAttribute('data-wtkf-source'):null;
+    if(mobileSource&&value.trim())originals.set(node,value.replace(value.trim(),mobileSource));
+    else if(!originals.has(node)||value!==rendered.get(node)){
       const canonical=sourceByTranslation.get(normalize(value));
       originals.set(node,canonical===undefined?value:value.replace(value.trim(),canonical));
     }
@@ -708,10 +712,6 @@
     document.documentElement.lang=currentLang;
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
     while(walker.nextNode())translateNode(walker.currentNode);
-    // Mobile primary is a runtime clone; keep its labels identical to the translated source nav.
-    const sourceLinks=document.querySelectorAll('.nav > .nav-item > a');
-    const mobileLinks=document.querySelectorAll('.wtkf-mobile-primary > a');
-    sourceLinks.forEach((source,i)=>{if(mobileLinks[i])mobileLinks[i].textContent=source.textContent});
   }
   window.wtkfApplyLanguage=applyLanguage;
   function go(code){
