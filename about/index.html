@@ -277,6 +277,43 @@
     ['명예총재 · 이사장(창시자) 인사말','Message from the Honorary President · Chairman (Founder)'],['연맹 총재 인사말','Message from the Federation President'],['비전 · 미션 · 핵심가치','Vision · Mission · Core Values'],['거버넌스(운영 원칙)','Governance (Operating Principles)'],['태권검도의 발자취','TaekwonKumdo Milestones'],['3단계 확장 로드맵','Three-stage Expansion Roadmap'],
     ['철학(교차원리)','Philosophy (Cross Principle)'],['구조 기반 무도','Structure-based martial art'],['과정/세미나/심사','Courses / Seminars / Grading'],['규정·양식·가이드','Regulations · Forms · Guides'],['검증·신뢰','Verification · Trust']
   ];
+  const bodyCopy=[
+    ['교차원리, 교차원리 기반 무도','Cross Principle, a martial art based on the Cross Principle'],
+    ['교육·심사·운영·안전·검증','education · grading · operation · safety · verification'],
+    ['명예총재 · 이사장(창시자) 인사말','Message from the Honorary President · Chairman (Founder)'],
+    ['— 명예총재 · 이사장(창시자)','— Honorary President · Chairman (Founder)'],
+    ['연맹 총재 인사말','Message from the Federation President'],
+    ['교육 표준 · 지도자 인증 · 지부 운영 · 공정한 검증(조회)','education standards · instructor certification · branch operation · fair verification'],
+    ['— 세계태권검도연맹 총재','— President, World Taekwon-Geomdo Federation'],
+    ['태권검도를 “구조 기반 국제 표준 무도·스포츠”로 확립','Establish TaekwonKumdo as a structure-based international standard martial art and sport'],
+    ['교육 표준화 · 안전 원칙 · 지도자 인증 · 지부 확장 · 공정한 검증(조회)','Standardized education · safety principles · instructor certification · branch expansion · fair verification'],
+    ['정통성 · 투명성 · 일관성 · 품격 · 국제 협력','Authenticity · transparency · consistency · dignity · international cooperation'],
+    ['표준 문서 기반 운영','Standards-based operation'],
+    ['규정·기준·양식·매뉴얼을 자료실에 공개하고, 업데이트 이력을 관리합니다.','Regulations, standards, forms and manuals are published in the resource center with update history managed.'],
+    ['공정한 심사/인증','Fair grading / certification'],
+    ['심사 기준(평가표)과 인증 절차를 명확히 하여, 국가/지부 간 편차를 최소화합니다.','Clear grading criteria and certification procedures minimize differences among countries and branches.'],
+    ['검증(조회) 우선','Verification first'],
+    ['단증·자격·지정도장 정보를 조회로 확인할 수 있게 하여 신뢰를 설계합니다.','Trust is built by making Dan certificates, qualifications and designated dojang information verifiable.'],
+    ['태권검도 창시 기반 확립','Foundation of TaekwonKumdo established'],
+    ['지도 체계/심사 기준 정리','Instruction system / grading standards organized'],
+    ['국내외 세미나 확대, 지부 네트워크 구축','Domestic and international seminars expanded; branch network established'],
+    ['공식 플랫폼 구축(조회·자료·지부 표준 연동)','Official platform established (verification · resources · branch standards)'],
+    ['※ 연혁은 “공식 문장”으로 확정해 넣으면 국제 신뢰도가 크게 올라갑니다.','※ Finalizing the history in official wording will significantly strengthen international credibility.'],
+    ['표준 문서/평가표 확정 → 지도자 과정 고도화','Finalize standard documents/evaluation sheets → advance instructor courses'],
+    ['지부 운영 가이드 정착 → 공인행사 체계화','Establish branch operation guide → systematize official events'],
+    ['다국어 확장(EN/CN/ES) → 국제 파트너십 확대','Expand multilingual support → expand international partnerships'],
+    ['태권검도는 무엇이 다른가요?','What makes TaekwonKumdo different?'],
+    ['“구조”로 지도·심사·운영이 연결됩니다.','Instruction, grading and operation are connected through structure.'],
+    ['공식 지정도장/지부는 어떻게 신청하나요?','How do I apply for an official designated dojang / branch?'],
+    ['절차와 서류는 자료실에 있습니다.','Procedures and documents are available in the resource center.'],
+    ['지부 안내 페이지에서 운영 형태를 선택하고, 문의 페이지로 신청하면 안내드립니다.','Choose the operating type on the branch information page and submit an inquiry to receive guidance.'],
+    ['지부 안내','Branch Information'],
+    ['단증/자격의 진위는 어떻게 확인하나요?','How can I verify Dan certificates / qualifications?'],
+    ['조회 서비스로 확인합니다.','Use the verification service.'],
+    ['조회 서비스에서 개인/기관 정보를 입력하면 공식 등록 여부를 확인할 수 있습니다.','Enter individual or organization information in the verification service to confirm official registration.'],
+    ['공식 조회','Official Verification']
+  ];
+  const bodyEls=bodyCopy.flatMap(function(pair){return Array.from(document.querySelectorAll('h2,h3,p,li,strong,span,a')).filter(function(el){return el.children.length===0&&el.textContent.trim()===pair[0];}).map(function(el){return {el:el,ko:pair[0],en:pair[1]};});});
   const ids=['aboutI18nTitle','aboutI18nOfficialPage','aboutI18nStatementTitle','aboutI18nStatementBody','aboutI18nChip1','aboutI18nChip2','aboutI18nChip3','aboutI18nChip4','aboutI18nChip5'];
   const extras=extra.flatMap(function(pair){return Array.from(document.querySelectorAll('a,span,strong,h2,h3,b')).filter(function(el){return el.children.length===0&&el.textContent.trim()===pair[0];}).map(function(el){return {el:el,ko:pair[0],en:pair[1]};});});
   function apply(code){
@@ -284,6 +321,7 @@
     if(!values)return;
     ids.forEach(function(id,i){const el=document.getElementById(id);if(el)el.textContent=values[i];});
     extras.forEach(function(x){x.el.textContent=x[code];});
+    bodyEls.forEach(function(x){x.el.textContent=x[code];});
     document.documentElement.lang=code;
   }
   let saved='ko';
