@@ -330,11 +330,6 @@
   };
   const applyFixedBlocks=()=>document.querySelectorAll('[data-i18n-en]').forEach((el,i)=>{const a=fixedText[lang];if(a&&a[i])el.textContent=a[i];else if(lang==='en')el.textContent=el.getAttribute('data-i18n-en');});
   applyFixedBlocks();
-  setTimeout(applyFixedBlocks,0);
-  setTimeout(applyFixedBlocks,250);
-  setTimeout(applyFixedBlocks,1000);
-  const fixedObserver=new MutationObserver(()=>applyFixedBlocks());
-  fixedObserver.observe(document.body,{childList:true,subtree:true});
   const originals=new WeakMap();
   const walker=document.createTreeWalker(document.documentElement,NodeFilter.SHOW_TEXT);
   const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
