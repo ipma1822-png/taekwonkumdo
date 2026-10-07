@@ -20,7 +20,7 @@
   const ov=document.createElement('div'); ov.className='wtkf-lang-overlay';
   ov.innerHTML=`<div class="wtkf-lang-panel" role="dialog" aria-modal="true"><div class="wtkf-lang-head"><div><small>WTKF · GLOBAL LANGUAGE</small><h2>언어를 선택하세요</h2><p>태권검도 홈페이지를 원하는 언어로 볼 수 있습니다.</p></div><button class="wtkf-lang-close" aria-label="닫기">×</button></div><div class="wtkf-lang-grid"></div></div>`;
   const grid=ov.querySelector('.wtkf-lang-grid');
-  langs.forEach(([code,country,flag,name])=>{const x=document.createElement('button');x.className='wtkf-lang-item';x.innerHTML=`<span class="wtkf-flag">${flag}</span><span><b>${name}</b><em>${country}</em></span>`;x.onclick=()=>go(code);grid.appendChild(x)});
+  langs.forEach(([code,country,flag,name])=>{const x=document.createElement('button');x.className='wtkf-lang-item';x.innerHTML=`<span class="wtkf-flag">${flag}</span><span><b>${name}</b><em>${country}</em></span>`;x.dataset.lang=code;x.onclick=()=>go(code);grid.appendChild(x)});
   function go(code){
     localStorage.setItem('wtkf_lang',code);
     ov.classList.remove('open');
