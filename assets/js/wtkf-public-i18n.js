@@ -26,6 +26,12 @@
   function applyLanguage(code){
     currentLang=languageCode(code); document.documentElement.lang=currentLang; document.documentElement.dir=currentLang==='ar'?'rtl':'ltr';
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); while(walker.nextNode())translateNode(walker.currentNode);
+    document.querySelectorAll('.wtkf-mobile-primary').forEach(strip=>{
+      const nav=document.querySelector('.nav'); if(!nav)return;
+      strip.innerHTML='';
+      nav.querySelectorAll(':scope > .nav-item > a').forEach(a=>{const clone=a.cloneNode(true);clone.classList.remove('pill');strip.appendChild(clone)});
+      const w=document.createTreeWalker(strip,NodeFilter.SHOW_TEXT); while(w.nextNode())translateNode(w.currentNode);
+    });
   }
   window.wtkfApplyLanguage=applyLanguage;
   document.addEventListener('wtkf-language-change',e=>applyLanguage(e.detail&&e.detail.code));
