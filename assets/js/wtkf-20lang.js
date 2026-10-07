@@ -27,5 +27,21 @@
     document.dispatchEvent(new CustomEvent('wtkf-language-change',{detail:{code:code}}));
   }
   btn.onclick=()=>ov.classList.add('open'); ov.querySelector('.wtkf-lang-close').onclick=()=>ov.classList.remove('open'); ov.onclick=e=>{if(e.target===ov)ov.classList.remove('open')};
+  const topbar=document.querySelector('.topbar');
+  const existingTopButton=document.getElementById('wtkfTopLanguage');
+  if(topbar&&!existingTopButton){
+    const topButton=document.createElement('button');
+    topButton.type='button'; topButton.className='wtkf-header-language';
+    topButton.setAttribute('aria-label','20개 언어 선택');
+    topButton.textContent='🌐 20 LANG';
+    topButton.onclick=()=>ov.classList.add('open');
+    const toggle=topbar.querySelector('[data-nav-toggle]');
+    if(toggle)toggle.insertAdjacentElement('beforebegin',topButton);
+    else topbar.appendChild(topButton);
+    const headerStyle=document.createElement('style');
+    headerStyle.textContent='.wtkf-header-language{flex:0 0 auto;cursor:pointer;margin-left:8px;padding:9px 12px;border:1px solid #d4af37;border-radius:999px;background:#102035;color:#fff;font-weight:800;white-space:nowrap}@media(max-width:820px){.wtkf-header-language{font-size:12px;padding:8px}}';
+    document.head.appendChild(headerStyle);
+    btn.hidden=true;
+  }
   document.body.append(btn,ov);
 })();
