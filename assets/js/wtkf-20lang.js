@@ -24,16 +24,7 @@
   function go(code){
     localStorage.setItem('wtkf_lang',code);
     if(code==='ko'){ location.href=location.origin+location.pathname+location.search.replace(/([?&])lang=[^&]*&?/,'$1').replace(/[?&]$/,'')+location.hash; return; }
-    const clean=location.href.replace(/[?&]lang=[^&#]*/g,'');
-    location.href='https://translate.google.com/translate?sl=ko&tl='+encodeURIComponent(code)+'&u='+encodeURIComponent(clean);
   }
   btn.onclick=()=>ov.classList.add('open'); ov.querySelector('.wtkf-lang-close').onclick=()=>ov.classList.remove('open'); ov.onclick=e=>{if(e.target===ov)ov.classList.remove('open')};
   document.body.append(btn,ov);
-  // IPMA 대문에서 ?lang=xx 로 들어온 경우 첫 방문에 해당 언어 번역으로 연결
-  const p=new URLSearchParams(location.search); const incoming=p.get('lang');
-  if(incoming && incoming!=='ko' && !sessionStorage.getItem('wtkf_lang_jump_'+incoming)){
-    sessionStorage.setItem('wtkf_lang_jump_'+incoming,'1');
-    const map={zh:'zh-CN',cn:'zh-CN',jp:'ja',br:'pt',vn:'vi',th:'th',id:'id',my:'ms',ph:'tl',in:'hi',sa:'ar',np:'ne'};
-    go(map[incoming]||incoming);
-  }
 })();
