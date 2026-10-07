@@ -274,6 +274,7 @@
     tr:{'세계태권검도연맹':'Dünya Taekwon-Geomdo Federasyonu','연맹소개':'Federasyon Tanıtımı','철학':'Felsefe','프로그램':'Programlar','임원·지도자':'Yönetim · Eğitmenler','지부':'Şubeler','조회':'Doğrulama','자료실':'Kaynaklar','미디어':'Medya','신청·문의':'Başvuru · İletişim','공식 선언(Official Statement)':'Resmî Açıklama','비전 · 미션 · 핵심가치':'Vizyon · Misyon · Temel Değerler','거버넌스(운영 원칙)':'Yönetişim (İşletme İlkeleri)','태권검도의 발자취':'TaekwonKumdo’nun Yolculuğu','3단계 확장 로드맵':'3 Aşamalı Genişleme Yol Haritası','바로가기':'Hızlı Bağlantılar'},
     ne:{'세계태권검도연맹':'विश्व Taekwon-Geomdo महासंघ','연맹소개':'महासंघ परिचय','철학':'दर्शन','프로그램':'कार्यक्रम','임원·지도자':'नेतृत्व · प्रशिक्षक','지부':'शाखाहरू','조회':'प्रमाणीकरण','자료실':'स्रोतहरू','미디어':'मिडिया','신청·문의':'आवेदन · सम्पर्क','공식 선언(Official Statement)':'आधिकारिक वक्तव्य','비전 · 미션 · 핵심가치':'दृष्टि · मिशन · मूल मूल्य','거버넌스(운영 원칙)':'सुशासन (सञ्चालन सिद्धान्त)','태권검도의 발자취':'TaekwonKumdo को यात्रा','3단계 확장 로드맵':'३ चरणको विस्तार मार्गचित्र','바로가기':'द्रुत लिङ्क'}
   };
+  const fullFallbackLangs=['mn','th','id','ms','tl','hi','ar','tr','ne'];
   const bindings=Array.from(document.querySelectorAll('[data-i18n]')).flatMap(function(element){
     const entries=english[element.getAttribute('data-i18n')]||[];
     return entries.map(function(entry){
@@ -287,6 +288,11 @@
       const value=(code==='en'?binding.en:binding.ko);
       if(binding.node.nodeValue!==value)binding.node.nodeValue=value;
     });
+    if(fullFallbackLangs.indexOf(code)>=0){
+      bindings.forEach(function(binding){
+        if(binding.node.nodeValue!==binding.en)binding.node.nodeValue=binding.en;
+      });
+    }
     if(code!=='ko'&&code!=='en'){
       const dict=Object.assign({},generatedLocal[code]||{},recovered.local[code]||{},recovered.body[code]||{});
       document.querySelectorAll('[data-i18n]').forEach(function(el){
