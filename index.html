@@ -699,6 +699,7 @@
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
     while(walker.nextNode())translateNode(walker.currentNode);
   }
+  window.wtkfApplyLanguage=applyLanguage;
   function go(code){
     code=languageCode(code);
     try{localStorage.setItem('wtkf_lang',code)}catch(e){}
