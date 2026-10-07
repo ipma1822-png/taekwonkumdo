@@ -279,11 +279,8 @@
   document.addEventListener('click',function(e){
     const item=e.target.closest('.wtkf-lang-item');
     if(!item)return;
-    const grid=item.parentElement;
-    if(!grid||!grid.classList.contains('wtkf-lang-grid'))return;
-    const index=Array.prototype.indexOf.call(grid.children,item);
-    if(index===0)apply('ko');
-    else if(index===1)apply('en');
+    const code=item.dataset.lang;
+    if(code==='ko'||code==='en')apply(code);
   });
 })();
 </script>
