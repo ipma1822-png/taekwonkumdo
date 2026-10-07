@@ -194,6 +194,19 @@
   </div>`;
   legacyHero.insertAdjacentElement('beforebegin',section);
 
+  // Re-run the existing 20-language text translator after WORLD HUB is injected.
+  // The hub is created after index.html's initial language pass, so without this
+  // signal its Korean text can remain until another DOM mutation occurs.
+  try{
+    const lang=new URLSearchParams(location.search).get('lang')||localStorage.getItem('wtkf_lang')||'ko';
+    if(lang!=='ko'){
+      const marker=document.createTextNode('');
+      section.appendChild(marker);
+      marker.nodeValue=' ';
+      marker.remove();
+    }
+  }catch(e){}
+
   const videoHall=document.querySelector('.wtkf-home-video');
   if(videoHall) videoHall.id='wtkfhub-tech';
   const liveBoard=document.querySelector('.wtkf-live-board');
