@@ -23,6 +23,7 @@
   langs.forEach(([code,country,flag,name])=>{const x=document.createElement('button');x.className='wtkf-lang-item';x.innerHTML=`<span class="wtkf-flag">${flag}</span><span><b>${name}</b><em>${country}</em></span>`;x.onclick=()=>go(code);grid.appendChild(x)});
   function go(code){
     localStorage.setItem('wtkf_lang',code);
+    ov.classList.remove('open');
     if(code==='ko'){ location.href=location.origin+location.pathname+location.search.replace(/([?&])lang=[^&]*&?/,'$1').replace(/[?&]$/,'')+location.hash; return; }
   }
   btn.onclick=()=>ov.classList.add('open'); ov.querySelector('.wtkf-lang-close').onclick=()=>ov.classList.remove('open'); ov.onclick=e=>{if(e.target===ov)ov.classList.remove('open')};
