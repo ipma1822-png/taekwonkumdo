@@ -708,6 +708,10 @@
     document.documentElement.lang=currentLang;
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
     while(walker.nextNode())translateNode(walker.currentNode);
+    // Mobile primary is a runtime clone; keep its labels identical to the translated source nav.
+    const sourceLinks=document.querySelectorAll('.nav > .nav-item > a');
+    const mobileLinks=document.querySelectorAll('.wtkf-mobile-primary > a');
+    sourceLinks.forEach((source,i)=>{if(mobileLinks[i])mobileLinks[i].textContent=source.textContent});
   }
   window.wtkfApplyLanguage=applyLanguage;
   function go(code){
