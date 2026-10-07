@@ -46,5 +46,8 @@ h1{margin:12px 0 7px;font-size:clamp(31px,7vw,50px);line-height:1.03;letter-spac
 <script>
 (()=>{const cards=[...document.querySelectorAll('.card')],bar=document.getElementById('bar'),prev=document.getElementById('prev'),next=document.getElementById('next'),summary=document.getElementById('summary');let i=0;function draw(){cards.forEach((c,n)=>c.classList.toggle('active',n===i));bar.style.width=((i+1)/cards.length*100)+'%';prev.disabled=i===0;prev.style.opacity=i===0?'.45':'1';next.textContent=i===cards.length-1?'지도자 경로 한눈에 보기 ✓':'다음 단계 · 8초 →';cards[i].scrollIntoView({behavior:'smooth',block:'center'});}prev.onclick=()=>{if(i>0){i--;summary.classList.remove('show');draw()}};next.onclick=()=>{if(i<cards.length-1){i++;draw()}else{summary.classList.add('show');summary.scrollIntoView({behavior:'smooth',block:'center'})}};document.getElementById('share').onclick=async()=>{const d={title:document.title,text:'태권검도 지도자 교육·자격 경로를 확인해 보세요.',url:location.href};if(navigator.share){try{await navigator.share(d)}catch(e){}}else{await navigator.clipboard.writeText(location.href);alert('링크를 복사했습니다.')}};document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);alert('링크를 복사했습니다.')}catch(e){prompt('아래 주소를 복사해 주세요.',location.href)}};draw()})();
 </script>
+
+<script defer src="../../assets/js/wtkf-20lang.js?v=1"></script>
+<script defer src="../../assets/js/wtkf-public-i18n.js?v=1"></script>
 </body>
 </html>
