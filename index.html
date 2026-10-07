@@ -688,7 +688,8 @@
     if(node.nodeType!==Node.TEXT_NODE||!node.parentElement||node.parentElement.closest('script,style,textarea,input,select,.wtkf-lang-grid,.wtkf-item'))return;
     const value=node.nodeValue;
     if(!originals.has(node)||value!==rendered.get(node))originals.set(node,value);
-    const original=originals.get(node), translated=dictionaries[currentLang]?.get(normalize(original));
+    const original=originals.get(node);
+    const translated=currentLang==='ko'?undefined:dictionaries[currentLang]?.get(normalize(original));
     const next=translated===undefined?original:original.replace(original.trim(),translated);
     rendered.set(node,next);
     if(node.nodeValue!==next)node.nodeValue=next;
