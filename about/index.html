@@ -279,5 +279,6 @@
   nodes.forEach(n=>{if(n.parentElement&&/^(SCRIPT|STYLE|NOSCRIPT)$/.test(n.parentElement.tagName))return;const t=n.nodeValue.trim();if(!t)return;originals.set(n,n.nodeValue);const v=en[t];if(v!==undefined)n.nodeValue=n.nodeValue.replace(t,v);});
   document.documentElement.lang=lang;
 })();
-</script>\n</body>
+</script>
+</body>
 </html>
