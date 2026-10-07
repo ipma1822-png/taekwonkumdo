@@ -344,12 +344,15 @@
     document.documentElement.lang=code;
     document.documentElement.dir=(code==='ar'?'rtl':'ltr');
   }
-  document.addEventListener('click',function(event){
+  function onLanguageChoice(event){
     const choice=event.target.closest('.wtkf-lang-item');
     if(!choice)return;
     const code=choice.dataset.lang;
-    applyLanguage(code);
-  });
+    // Shared selector stores the selected code; defer one microtask so that handler
+    // finishes first, then translate the entire page immediately without refresh.
+    Promise.resolve().then(function(){ applyLanguage(code); });
+  }
+  document.addEventListener('click',onLanguageChoice);
   let saved='ko';
   try{saved=localStorage.getItem('wtkf_lang')||'ko'}catch(e){}
   applyLanguage(saved);
