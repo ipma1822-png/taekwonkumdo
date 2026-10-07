@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#0b0f19" />
   <link rel="stylesheet" href="../assets/css/style.css?v=3.0" />
   <script defer src="../assets/js/data.js"></script>
-  <script defer src="../assets/js/app.js?v=3.0"></script>
+  <script defer src="../assets/js/app.js?v=3.2"></script>
   <style>
     .wtkf-top-language{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:0 13px;margin-left:10px;border:1px solid rgba(215,179,91,.66);border-radius:999px;background:#102035;color:#fff;font-weight:900;font-size:12px;cursor:pointer;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.18);position:relative;z-index:1002}
     .wtkf-top-language span{color:#e5bf63}
@@ -383,6 +383,11 @@
     }
     document.documentElement.lang=code;
     document.documentElement.dir=(code==='ar'?'rtl':'ltr');
+    const sourceLinks=document.querySelectorAll('.nav > .nav-item > a');
+    const mobileLinks=document.querySelectorAll('.wtkf-mobile-primary > a');
+    sourceLinks.forEach(function(source,i){
+      if(mobileLinks[i])mobileLinks[i].textContent=source.textContent;
+    });
   }
   document.addEventListener('wtkf-language-change',function(event){
     applyLanguage(event.detail&&event.detail.code);
