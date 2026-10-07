@@ -41,7 +41,7 @@
     const headerStyle=document.createElement('style');
     headerStyle.textContent='.wtkf-header-language{flex:0 0 auto;cursor:pointer;margin-left:8px;padding:9px 12px;border:1px solid #d4af37;border-radius:999px;background:#102035;color:#fff;font-weight:800;white-space:nowrap}@media(max-width:820px){.wtkf-header-language{font-size:12px;padding:8px}}';
     document.head.appendChild(headerStyle);
-    btn.hidden=true;
+    // Keep the floating selector visible as a fallback on narrow layouts.
   }
   document.body.append(btn,ov);
 })();
