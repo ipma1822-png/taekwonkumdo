@@ -7,6 +7,7 @@
   Object.values(I18N).forEach(entries=>Object.entries(entries).forEach(([source,translated])=>{if(translated)sourceByTranslation.set(normalize(translated),source)}));
   const aliases={zh:'zh-CN',cn:'zh-CN',jp:'ja',br:'pt',vn:'vi',my:'ms',ph:'tl',fil:'tl',in:'hi',sa:'ar',np:'ne'};
   const supported=['ko','en','zh-CN','ja','es','fr','de','pt','it','ru','mn','vi','th','id','ms','tl','hi','ar','tr','ne'];
+  const originalTitle=document.title;
   let currentLang='ko';
   const languageCode=code=>{code=aliases[code]||code;return supported.includes(code)?code:'ko'};
   function translateNode(node){
@@ -25,6 +26,7 @@
   }
   function applyLanguage(code){
     currentLang=languageCode(code); document.documentElement.lang=currentLang; document.documentElement.dir=currentLang==='ar'?'rtl':'ltr';
+    document.title=currentLang==='ko'?originalTitle:(dictionaries[currentLang]?.get(normalize(originalTitle))||originalTitle);
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); while(walker.nextNode())translateNode(walker.currentNode);
     document.querySelectorAll('.wtkf-mobile-primary').forEach(strip=>{
       const nav=document.querySelector('.nav'); if(!nav)return;
