@@ -285,40 +285,36 @@
     }).filter(Boolean);
   });
   function applyLanguage(code){
-    if(code!=='ko'&&code!=='en'&&!recovered.local[code]&&!recovered.body[code]&&!recovered.fixed[code]&&!generatedLocal[code])return;
+    const supported=['ko','en','zh-CN','ja','es','fr','de','pt','it','ru','vi','mn','th','id','ms','tl','hi','ar','tr','ne'];
+    if(supported.indexOf(code)<0)return;
+    // Always reset every bound text node from the immutable Korean snapshot first.
     bindings.forEach(function(binding){
-      const value=(code==='en'?binding.en:binding.ko);
-      if(binding.node.nodeValue!==value)binding.node.nodeValue=value;
+      if(binding.node.isConnected&&binding.node.nodeValue!==binding.ko)binding.node.nodeValue=binding.ko;
     });
-    if(fullFallbackLangs.indexOf(code)>=0){
+    // English is the complete safe baseline for every non-Korean language.
+    if(code!=='ko'){
+      bindings.forEach(function(binding){
+        if(binding.node.isConnected&&binding.node.nodeValue!==binding.en)binding.node.nodeValue=binding.en;
+      });
+    }
+    // Apply only exact keyed single-node native translations; never translate mutated text.
+    if(code!=='ko'&&code!=='en'){
       const core=nativeCore[code]||{};
       Object.keys(core).forEach(function(id){
         const el=document.querySelector('[data-i18n="'+id+'"]');
         if(el&&el.childNodes.length===1&&el.firstChild.nodeType===3)el.firstChild.nodeValue=core[id];
       });
-      bindings.forEach(function(binding){
-        if(binding.node.nodeValue!==binding.en)binding.node.nodeValue=binding.en;
-      });
-    }
-    if(code!=='ko'&&code!=='en'){
       const dict=Object.assign({},generatedLocal[code]||{},recovered.local[code]||{},recovered.body[code]||{});
       document.querySelectorAll('[data-i18n]').forEach(function(el){
-        Array.from(el.childNodes).forEach(function(node){
-          if(node.nodeType!==3)return;
-          const raw=node.nodeValue, key=raw.trim();
-          if(dict[key]!==undefined)node.nodeValue=raw.replace(key,dict[key]);
-        });
+        if(el.childNodes.length!==1||el.firstChild.nodeType!==3)return;
+        const node=el.firstChild;
+        const koBinding=bindings.find(function(x){return x.node===node;});
+        const source=koBinding?koBinding.ko.trim():null;
+        if(source&&dict[source]!==undefined)node.nodeValue=dict[source];
       });
-      const blocks=recovered.fixed[code];
-      if(blocks){
-        const ids=['about-069','about-071','about-073','about-076','about-078','about-079'];
-        ids.forEach(function(id,i){
-          const el=document.querySelector('[data-i18n="'+id+'"]');
-          if(el&&blocks[i])el.textContent=blocks[i];
-        });
-      }
     }
     document.documentElement.lang=code;
+    document.documentElement.dir=(code==='ar'?'rtl':'ltr');
   }
   document.addEventListener('click',function(event){
     const choice=event.target.closest('.wtkf-lang-item');
