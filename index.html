@@ -681,13 +681,22 @@
   const normalize=text=>text.replace(/\s+/g,' ').trim();
   const dictionaries=Object.fromEntries(Object.entries(I18N).map(([code,entries])=>[code,new Map(Object.entries(entries).map(([source,text])=>[normalize(source),text]))]));
   const originals=new WeakMap(), rendered=new WeakMap();
+  const sourceKeys=new Set(Object.values(I18N).flatMap(entries=>Object.keys(entries).map(normalize)));
+  const sourceByTranslation=new Map();
+  const menuSources=new Set(Array.from(document.querySelectorAll('.nav > .nav-item > a'),a=>normalize(a.textContent)));
+  Object.values(I18N).forEach(entries=>Object.entries(entries).forEach(([source,text])=>{
+    const key=normalize(text); if(!sourceKeys.has(key)&&(!sourceByTranslation.has(key)||menuSources.has(normalize(source))))sourceByTranslation.set(key,source);
+  }));
   const aliases={zh:'zh-CN',cn:'zh-CN',jp:'ja',br:'pt',vn:'vi',my:'ms',ph:'tl',fil:'tl',in:'hi',sa:'ar',np:'ne'};
   let currentLang='ko';
   const languageCode=code=>{code=aliases[code]||code;return langs.some(row=>row[0]===code)?code:'ko'};
   function translateNode(node){
     if(node.nodeType!==Node.TEXT_NODE||!node.parentElement||node.parentElement.closest('script,style,textarea,input,select,.wtkf-lang-grid,.wtkf-item'))return;
     const value=node.nodeValue;
-    if(!originals.has(node)||value!==rendered.get(node))originals.set(node,value);
+    if(!originals.has(node)||value!==rendered.get(node)){
+      const canonical=sourceByTranslation.get(normalize(value));
+      originals.set(node,canonical===undefined?value:value.replace(value.trim(),canonical));
+    }
     const original=originals.get(node);
     const translated=currentLang==='ko'?undefined:dictionaries[currentLang]?.get(normalize(original));
     const next=translated===undefined?original:original.replace(original.trim(),translated);
