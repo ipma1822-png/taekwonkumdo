@@ -3,6 +3,8 @@
   const normalize=text=>(text||'').replace(/\s+/g,' ').trim();
   const dictionaries=Object.fromEntries(Object.entries(I18N).map(([code,entries])=>[code,new Map(Object.entries(entries).map(([source,text])=>[normalize(source),text]))]));
   const originals=new WeakMap(), rendered=new WeakMap();
+  const sourceByTranslation=new Map();
+  Object.values(I18N).forEach(entries=>Object.entries(entries).forEach(([source,translated])=>{if(translated)sourceByTranslation.set(normalize(translated),source)}));
   const aliases={zh:'zh-CN',cn:'zh-CN',jp:'ja',br:'pt',vn:'vi',my:'ms',ph:'tl',fil:'tl',in:'hi',sa:'ar',np:'ne'};
   const supported=['ko','en','zh-CN','ja','es','fr','de','pt','it','ru','mn','vi','th','id','ms','tl','hi','ar','tr','ne'];
   let currentLang='ko';
@@ -10,7 +12,13 @@
   function translateNode(node){
     if(node.nodeType!==Node.TEXT_NODE||!node.parentElement||node.parentElement.closest('script,style,textarea,input,select,.wtkf-lang-grid,.wtkf-item'))return;
     const value=node.nodeValue;
-    if(!originals.has(node)||value!==rendered.get(node))originals.set(node,value);
+    if(!originals.has(node)){
+      const canonical=sourceByTranslation.get(normalize(value));
+      originals.set(node,canonical===undefined?value:value.replace(value.trim(),canonical));
+    }else if(value!==rendered.get(node)){
+      const canonical=sourceByTranslation.get(normalize(value));
+      originals.set(node,canonical===undefined?value:value.replace(value.trim(),canonical));
+    }
     const original=originals.get(node), translated=currentLang==='ko'?undefined:dictionaries[currentLang]?.get(normalize(original));
     const next=translated===undefined?original:original.replace(original.trim(),translated);
     rendered.set(node,next); if(node.nodeValue!==next)node.nodeValue=next;
@@ -21,6 +29,7 @@
   }
   window.wtkfApplyLanguage=applyLanguage;
   document.addEventListener('wtkf-language-change',e=>applyLanguage(e.detail&&e.detail.code));
+  window.addEventListener('pageshow',()=>{let code='ko';try{code=localStorage.getItem('wtkf_lang')||'ko'}catch(e){}applyLanguage(code)});
   let saved='ko'; try{saved=localStorage.getItem('wtkf_lang')||'ko'}catch(e){}
   applyLanguage(new URLSearchParams(location.search).get('lang')||saved);
   const observer=new MutationObserver(records=>{for(const record of records){if(record.type==='characterData')translateNode(record.target);else for(const node of record.addedNodes){if(node.nodeType===Node.TEXT_NODE)translateNode(node);else if(node.nodeType===Node.ELEMENT_NODE){const w=document.createTreeWalker(node,NodeFilter.SHOW_TEXT);while(w.nextNode())translateNode(w.currentNode);}}}});
