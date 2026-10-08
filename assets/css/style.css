@@ -172,3 +172,15 @@ body.video-modal-open{overflow:hidden}
  .nav.mobile-open .nav-item>a.active{color:#e6bc61!important}
  .nav.mobile-open .nav-item>button.wtkf-nav-disclosure{color:#e6bc61!important;opacity:1!important}
 }
+
+/* Narrow mobile header: reserve space for language and menu controls. */
+@media (max-width:650px){
+.topbar{display:flex!important;align-items:center!important;gap:6px!important;overflow:visible!important}
+.topbar>.brand{flex:1 1 0!important;min-width:0!important;overflow:hidden!important}
+.topbar>.brand .brand-text{min-width:0!important;overflow:hidden!important}
+.topbar>.brand .brand-text strong{display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:clamp(12px,3vw,17px)!important}
+.topbar #wtkfTopLanguage{flex:0 0 auto!important;margin-left:auto!important;padding:0 9px!important;min-width:70px!important;max-width:90px!important;white-space:nowrap!important;font-size:0!important}
+.topbar #wtkfTopLanguage::after{content:'LANG';font-size:11px!important;font-weight:900;color:#f3cc75}
+.topbar #wtkfTopLanguage span{display:none!important}
+.topbar .nav-toggle{display:block!important;flex:0 0 42px!important;width:42px!important;min-width:42px!important;margin:0!important;padding:0!important}
+}
