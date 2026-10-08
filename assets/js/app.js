@@ -32,24 +32,48 @@
     });
   }
 
-  // Mobile: click top menu to show its own submenu.
-  document.querySelectorAll('.nav-item > a').forEach(a=>{
-    a.addEventListener('click', e=>{
-      if(innerWidth <= 1050 && nav?.classList.contains('mobile-open')){
-        const item = a.parentElement;
-        const dd = item?.querySelector(':scope > .nav-dropdown');
-        if(dd){
-          // First tap expands the submenu; tapping the active heading again
-          // follows its original page link, so mobile users are not trapped.
-          const was = item.classList.contains('mobile-open-item');
-          if(!was){
-            e.preventDefault();
-            nav.querySelectorAll('.mobile-open-item').forEach(x=>x.classList.remove('mobile-open-item'));
-            item.classList.add('mobile-open-item');
-          }
-        }
-      }
+  // Mobile: top-level links navigate directly. A separate disclosure button
+  // expands each submenu without intercepting the page link.
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const a = item.querySelector(':scope > a');
+    const dd = item.querySelector(':scope > .nav-dropdown');
+    if(!a || !dd) return;
+    const disclosure = document.createElement('button');
+    disclosure.type = 'button';
+    disclosure.className = 'wtkf-submenu-toggle';
+    disclosure.setAttribute('aria-label', (a.textContent || '').trim() + ' submenu');
+    disclosure.setAttribute('aria-expanded', 'false');
+    disclosure.textContent = '▾';
+    disclosure.style.cssText = 'display:none;flex:0 0 34px;align-items:center;justify-content:center;min-height:36px;border:1px solid rgba(212,175,55,.45);border-radius:8px;background:transparent;color:#d4af37;cursor:pointer';
+    item.appendChild(disclosure);
+    disclosure.addEventListener('click', () => {
+      const open = !item.classList.contains('mobile-open-item');
+      nav.querySelectorAll('.mobile-open-item').forEach(x => {
+        x.classList.remove('mobile-open-item');
+        const btn = x.querySelector(':scope > .wtkf-submenu-toggle');
+        if(btn) btn.setAttribute('aria-expanded','false');
+      });
+      if(open) item.classList.add('mobile-open-item');
+      disclosure.setAttribute('aria-expanded',String(open));
     });
+    const mq = window.matchMedia('(max-width: 1050px)');
+    const sync = () => {
+      disclosure.style.display = mq.matches ? 'inline-flex' : 'none';
+      if(mq.matches){
+        item.style.display = 'flex';
+        item.style.flexWrap = 'wrap';
+        a.style.flex = '1 1 auto';
+        dd.style.flexBasis = '100%';
+      } else {
+        item.style.display = '';
+        item.style.flexWrap = '';
+        a.style.flex = '';
+        dd.style.flexBasis = '';
+      }
+    };
+    sync();
+    if(mq.addEventListener) mq.addEventListener('change',sync);
+    else if(mq.addListener) mq.addListener(sync);
   });
 
   // Progressive reveal
