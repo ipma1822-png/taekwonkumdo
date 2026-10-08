@@ -164,3 +164,11 @@ body.video-modal-open{overflow:hidden}
   .wtkf-mobile-primary a{flex:0 0 auto;display:block;padding:11px 14px;color:#d6e0e9;text-decoration:none;font-size:12px;font-weight:800;white-space:nowrap;border-right:1px solid rgba(255,255,255,.06)}
   .wtkf-mobile-primary a:hover,.wtkf-mobile-primary a:focus,.wtkf-mobile-primary a.active{color:#f1ca68;background:rgba(215,179,91,.08)}
 }
+
+/* Mobile hamburger: readable links even when the source nav has muted states. */
+@media(max-width:1050px){
+ .nav.mobile-open{z-index:1300;max-height:calc(100dvh - 100px);overflow-y:auto}
+ .nav.mobile-open .nav-item>a{color:#eef3fa!important;opacity:1!important}
+ .nav.mobile-open .nav-item>a.active{color:#e6bc61!important}
+ .nav.mobile-open .nav-item>button.wtkf-nav-disclosure{color:#e6bc61!important;opacity:1!important}
+}
