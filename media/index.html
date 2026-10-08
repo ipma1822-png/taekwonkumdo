@@ -202,6 +202,34 @@ window.addEventListener('beforeunload',()=>{if(member&&player)save('leave')});bo
  document.addEventListener('DOMContentLoaded',()=>update(new URLSearchParams(location.search).get('lang')||current()));
 })();
 </script>
+<script id="wtkf-media-ar-learning-i18n">
+(function(){
+ const words={"태권검도 온라인 학습관":"مركز التعلم الإلكتروني لتايكونكومدو","통합회원 로그인 후 시청하면 영상별 누적시간·진행률·완료여부·이어보기가 자동 기록됩니다. 태검 1~8장과 기본기술은 공인 교육시간에 포함하고, 국가대표 시범영상은 활동 시청시간만 기록합니다.":"عند تسجيل الدخول كعضو، يتم حفظ وقت المشاهدة والتقدم والإكمال واستئناف كل فيديو تلقائيًا. تُحتسب الأشكال من 1 إلى 8 والتقنيات الأساسية ضمن ساعات التدريب المعتمدة، بينما تُسجل العروض الوطنية كوقت مشاهدة فقط.","누적 시청시간":"إجمالي وقت المشاهدة","공인 교육시간":"ساعات التدريب المعتمدة","진행률":"التقدم","완료 여부":"حالة الإكمال","미완료":"غير مكتمل","완료":"مكتمل","미시청":"لم يُشاهد","통합회원 로그인":"تسجيل دخول العضو","로그인 상태를 확인하고 있습니다.":"جارٍ التحقق من حالة تسجيل الدخول.","비로그인 상태입니다. 영상은 볼 수 있지만 학습기록은 저장되지 않습니다.":"لم تسجل الدخول. يمكنك مشاهدة الفيديوهات، لكن لن يُحفظ تقدم التعلم.","통합회원 프로필을 찾지 못했습니다.":"تعذر العثور على ملف العضو.","전체 17편":"إجمالي 17 فيديو","공인교육 12편":"12 فيديو تدريبي معتمد","총 시청":"إجمالي المشاهدة","공인 교육":"التدريب المعتمد","0분 0초":"0 دقيقة 0 ثانية","0분":"0 دقيقة","0초":"0 ثانية","태검 1장":"تايغم 1","태검 2장":"تايغم 2","태검 3장":"تايغم 3","태검 4장":"تايغم 4","태검 5장":"تايغم 5","태검 6장":"تايغم 6","태검 7장":"تايغم 7","태검 8장":"تايغم 8"};
+ const root=document.getElementById('wtkf-learning');
+ if(!root)return;
+ const originals=new WeakMap(), rendered=new WeakMap();
+ let language='ko',busy=false;
+ function updateText(node){
+  if(!node.parentElement||node.parentElement.closest('script,style'))return;
+  const now=node.nodeValue;
+  if(!originals.has(node)||rendered.get(node)!==now)originals.set(node,now);
+  const source=originals.get(node),trim=source.trim();
+  const result=language==='ar'&&words[trim]?source.replace(trim,words[trim]):source;
+  rendered.set(node,result);if(now!==result)node.nodeValue=result;
+ }
+ function update(){
+  if(busy)return;busy=true;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  while(walker.nextNode())updateText(walker.currentNode);
+  busy=false;
+ }
+ function change(code){language=code||'ko';update();}
+ function saved(){try{return localStorage.getItem('wtkf_lang')||'ko'}catch(e){return 'ko'}}
+ document.addEventListener('wtkf-language-change',e=>queueMicrotask(()=>change(e.detail?.code||saved())));
+ window.addEventListener('load',()=>change(new URLSearchParams(location.search).get('lang')||saved()));
+ new MutationObserver(()=>update()).observe(root,{subtree:true,childList:true,characterData:true});
+})();
+</script>
 <script src="../assets/js/cross-site-network.js"></script>
 <script src="../assets/js/wtkf-20lang.js?v=3.4"></script>
 <script defer src="../assets/js/wtkf-public-i18n.js?v=18"></script>
