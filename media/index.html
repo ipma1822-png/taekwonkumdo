@@ -197,6 +197,8 @@ window.addEventListener('beforeunload',()=>{if(member&&player)save('leave')});bo
  function current(){try{return localStorage.getItem('wtkf_lang')||'ko'}catch(e){return 'ko'}}
  document.addEventListener('wtkf-language-change',e=>queueMicrotask(()=>update(e.detail?.code||current())));
  window.addEventListener('pageshow',()=>queueMicrotask(()=>update(new URLSearchParams(location.search).get('lang')||current())));
+ // The shared deferred translator runs after this inline script; reapply our media copy after it.
+ window.addEventListener('load',()=>update(new URLSearchParams(location.search).get('lang')||current()));
  document.addEventListener('DOMContentLoaded',()=>update(new URLSearchParams(location.search).get('lang')||current()));
 })();
 </script>
