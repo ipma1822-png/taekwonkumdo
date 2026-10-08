@@ -3,7 +3,7 @@
   const normalize=text=>(text||'').replace(/\s+/g,' ').trim();
   const dictionaries=Object.fromEntries(Object.entries(I18N).map(([code,entries])=>[code,new Map(Object.entries(entries).map(([source,text])=>[normalize(source),text]))]));
   const originals=new WeakMap(), rendered=new WeakMap();
-  const sourceKeys=new Set(Object.values(I18N).flatMap(entries=>Object.keys(entries).map(key=>normalize(key))));
+  const sourceKeys=new Set(Object.keys(I18N.en||{}).map(key=>normalize(key)));
   const sourceByTranslation=new Map();
   Object.values(I18N).forEach(entries=>Object.entries(entries).forEach(([source,translated])=>{
     const key=normalize(translated);
@@ -13,7 +13,7 @@
   const supported=['ko','en','zh-CN','ja','es','fr','de','pt','it','ru','mn','vi','th','id','ms','tl','hi','ar','tr','ne'];
   const originalTitle=document.title;
   let currentLang='ko';
-  const languageCode=code=>{code=aliases[code]||code;return supported.includes(code)?code:'ko'};
+  const languageCode=code=>{code=(code||'ko').trim();code=aliases[code]||code;return supported.includes(code)?code:'ko'};
   function translateNode(node){
     if(node.nodeType!==Node.TEXT_NODE||!node.parentElement||node.parentElement.closest('script,style,textarea,input,select,.wtkf-lang-overlay,.wtkf-lang-btn,.wtkf-item'))return;
     const value=node.nodeValue;
