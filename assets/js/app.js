@@ -39,10 +39,14 @@
         const item = a.parentElement;
         const dd = item?.querySelector(':scope > .nav-dropdown');
         if(dd){
-          e.preventDefault();
+          // First tap expands the submenu; tapping the active heading again
+          // follows its original page link, so mobile users are not trapped.
           const was = item.classList.contains('mobile-open-item');
-          nav.querySelectorAll('.mobile-open-item').forEach(x=>x.classList.remove('mobile-open-item'));
-          if(!was) item.classList.add('mobile-open-item');
+          if(!was){
+            e.preventDefault();
+            nav.querySelectorAll('.mobile-open-item').forEach(x=>x.classList.remove('mobile-open-item'));
+            item.classList.add('mobile-open-item');
+          }
         }
       }
     });
