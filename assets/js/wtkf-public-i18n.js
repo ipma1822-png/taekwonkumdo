@@ -3,21 +3,23 @@
   const normalize=text=>(text||'').replace(/\s+/g,' ').trim();
   const dictionaries=Object.fromEntries(Object.entries(I18N).map(([code,entries])=>[code,new Map(Object.entries(entries).map(([source,text])=>[normalize(source),text]))]));
   const originals=new WeakMap(), rendered=new WeakMap();
+  const sourceKeys=new Set(Object.values(I18N).flatMap(entries=>Object.keys(entries).map(key=>normalize(key))));
   const sourceByTranslation=new Map();
-  Object.values(I18N).forEach(entries=>Object.entries(entries).forEach(([source,translated])=>{if(translated)sourceByTranslation.set(normalize(translated),source)}));
+  Object.values(I18N).forEach(entries=>Object.entries(entries).forEach(([source,translated])=>{
+    const key=normalize(translated);
+    if(key && !sourceKeys.has(key) && !sourceByTranslation.has(key))sourceByTranslation.set(key,source);
+  }));
   const aliases={zh:'zh-CN',cn:'zh-CN',jp:'ja',br:'pt',vn:'vi',my:'ms',ph:'tl',fil:'tl',in:'hi',sa:'ar',np:'ne'};
   const supported=['ko','en','zh-CN','ja','es','fr','de','pt','it','ru','mn','vi','th','id','ms','tl','hi','ar','tr','ne'];
   const originalTitle=document.title;
   let currentLang='ko';
   const languageCode=code=>{code=aliases[code]||code;return supported.includes(code)?code:'ko'};
   function translateNode(node){
-    if(node.nodeType!==Node.TEXT_NODE||!node.parentElement||node.parentElement.closest('script,style,textarea,input,select,.wtkf-lang-grid,.wtkf-item'))return;
+    if(node.nodeType!==Node.TEXT_NODE||!node.parentElement||node.parentElement.closest('script,style,textarea,input,select,.wtkf-lang-overlay,.wtkf-lang-btn,.wtkf-item'))return;
     const value=node.nodeValue;
-    if(!originals.has(node)){
-      const canonical=sourceByTranslation.get(normalize(value));
-      originals.set(node,canonical===undefined?value:value.replace(value.trim(),canonical));
-    }else if(value!==rendered.get(node)){
-      const canonical=sourceByTranslation.get(normalize(value));
+    if(!originals.has(node)||value!==rendered.get(node)){
+      const normalized=normalize(value);
+      const canonical=sourceKeys.has(normalized)?normalized:sourceByTranslation.get(normalized);
       originals.set(node,canonical===undefined?value:value.replace(value.trim(),canonical));
     }
     const original=originals.get(node), translated=currentLang==='ko'?undefined:dictionaries[currentLang]?.get(normalize(original));
