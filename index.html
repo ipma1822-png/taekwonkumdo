@@ -3,6 +3,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
+<script src="./assets/js/wtkf-20lang.js?v=3.5" data-state-only></script>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <title>세계태권검도연맹 | Taekwon Kumdo Federation</title>
 <meta content="구조 &gt;&gt; 교차원리, 교차원리 기반 무도. 태권검도 공식 본부 플랫폼 — 철학·프로그램·지도자·지부·자료·공식 조회를 하나의 구조로 연결합니다." name="description"/>
@@ -736,18 +737,15 @@
   window.wtkfApplyLanguage=applyLanguage;
   function go(code){
     code=languageCode(code);
-    try{localStorage.setItem('wtkf_lang',code)}catch(e){}
-    const url=new URL(location.href);
-    url.searchParams.set('lang',code);
-    history.replaceState(null,'',url.pathname+url.search+url.hash);
+    code=window.wtkfLanguage.choose(code);
     applyLanguage(code);
     ov.classList.remove('open');
   }
   if(btn) btn.onclick=()=>ov.classList.add('open'); ov.querySelector('.wtkf-lang-close').onclick=()=>ov.classList.remove('open'); ov.onclick=e=>{if(e.target===ov)ov.classList.remove('open')};
   document.body.appendChild(ov);
-  // Default to Korean on a clean visit; explicit ?lang= remains supported.
-  applyLanguage(new URLSearchParams(location.search).get('lang')||'ko');
-  window.addEventListener('popstate',()=>applyLanguage(new URLSearchParams(location.search).get('lang')||'ko'));
+  // Explicit URL, then verified user choice, then Korean.
+  applyLanguage(window.wtkfLanguage.resolve());
+  window.addEventListener('popstate',()=>applyLanguage(window.wtkfLanguage.resolve()));
   const observer=new MutationObserver(records=>{
     for(const record of records){
       if(record.type==='characterData')translateNode(record.target);

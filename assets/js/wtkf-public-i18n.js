@@ -41,9 +41,8 @@
   }
   window.wtkfApplyLanguage=applyLanguage;
   document.addEventListener('wtkf-language-change',e=>applyLanguage(e.detail&&e.detail.code));
-  window.addEventListener('pageshow',()=>{let code='ko';try{code=localStorage.getItem('wtkf_lang')||'ko'}catch(e){}applyLanguage(code)});
-  let saved='ko'; try{saved=localStorage.getItem('wtkf_lang')||'ko'}catch(e){}
-  applyLanguage(new URLSearchParams(location.search).get('lang')||saved);
+  window.addEventListener('pageshow',()=>applyLanguage(window.wtkfLanguage.resolve()));
+  applyLanguage(window.wtkfLanguage.resolve());
   const observer=new MutationObserver(records=>{for(const record of records){if(record.type==='characterData')translateNode(record.target);else for(const node of record.addedNodes){if(node.nodeType===Node.TEXT_NODE)translateNode(node);else if(node.nodeType===Node.ELEMENT_NODE){const w=document.createTreeWalker(node,NodeFilter.SHOW_TEXT);while(w.nextNode())translateNode(w.currentNode);}}}});
   observer.observe(document.body,{subtree:true,childList:true,characterData:true});
 })();

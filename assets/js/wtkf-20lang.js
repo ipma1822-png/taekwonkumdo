@@ -1,4 +1,32 @@
+// One language policy for every page. Legacy values have no user-choice provenance.
 (function(){
+  if(window.wtkfLanguage)return;
+  const supported=['ko','en','zh-CN','ja','es','fr','de','pt','it','ru','mn','vi','th','id','ms','tl','hi','ar','tr','ne'];
+  const aliases={zh:'zh-CN',cn:'zh-CN',jp:'ja',br:'pt',vn:'vi',my:'ms',ph:'tl',fil:'tl',in:'hi',sa:'ar',np:'ne'};
+  const valid=value=>{value=aliases[value]||value;return supported.includes(value)?value:null};
+  const key='wtkf_language_choice_v1';
+  let selected='ko';
+  function save(code){
+    selected=valid(code)||'ko';
+    try{localStorage.setItem(key,selected);localStorage.setItem('wtkf_lang',selected)}catch(e){}
+    return selected;
+  }
+  function resolve(){
+    const explicit=valid(new URLSearchParams(location.search).get('lang'));
+    let stored=null;try{stored=valid(localStorage.getItem(key))}catch(e){}
+    return save(explicit||stored||selected);
+  }
+  function choose(code){
+    code=save(code);
+    const url=new URL(location.href);url.searchParams.set('lang',code);
+    history.replaceState(null,'',url.pathname+url.search+url.hash);
+    return code;
+  }
+  window.wtkfLanguage={resolve,choose};
+  resolve();
+})();
+(function(){
+  if(document.currentScript?.hasAttribute('data-state-only'))return;
   const langs=[
     ['ko','KR','🇰🇷','한국어'],['en','US','🇺🇸','English'],['zh-CN','CN','🇨🇳','中文'],['ja','JP','🇯🇵','日本語'],
     ['es','ES','🇪🇸','Español'],['fr','FR','🇫🇷','Français'],['de','DE','🇩🇪','Deutsch'],['pt','BR','🇧🇷','Português'],
@@ -22,7 +50,7 @@
   const grid=ov.querySelector('.wtkf-lang-grid');
   langs.forEach(([code,country,flag,name])=>{const x=document.createElement('button');x.className='wtkf-lang-item';x.innerHTML=`<span class="wtkf-flag">${flag}</span><span><b>${name}</b><em>${country}</em></span>`;x.dataset.lang=code;x.onclick=()=>go(code);grid.appendChild(x)});
   function go(code){
-    localStorage.setItem('wtkf_lang',code);
+    code=window.wtkfLanguage.choose(code);
     ov.classList.remove('open');
     document.dispatchEvent(new CustomEvent('wtkf-language-change',{detail:{code:code}}));
   }

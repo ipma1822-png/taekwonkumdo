@@ -249,7 +249,7 @@
   </div>
 </footer>
 <script src="../assets/js/cross-site-network.js"></script>
-<script src="../assets/js/wtkf-20lang.js?v=3.1"></script>
+<script src="../assets/js/wtkf-20lang.js?v=3.5"></script>
 <script>
 (function(){
   const button=document.getElementById('wtkfTopLanguage');
@@ -397,9 +397,7 @@
   document.addEventListener('wtkf-language-change',function(event){
     applyLanguage(event.detail&&event.detail.code);
   });
-  let saved='ko';
-  try{saved=new URLSearchParams(location.search).get('lang')||localStorage.getItem('wtkf_lang')||'ko'}catch(e){}
-  applyLanguage(saved);
+  applyLanguage(window.wtkfLanguage.resolve());
 })();
 </script>
 
