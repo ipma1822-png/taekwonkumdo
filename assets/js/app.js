@@ -226,7 +226,7 @@
 
   // WORLD HUB is injected dynamically; explicitly re-apply the current language.
   try{
-    const lang=new URLSearchParams(location.search).get('lang')||localStorage.getItem('wtkf_lang')||'ko';
+    const lang=new URLSearchParams(location.search).get('lang')||'ko';
     if(typeof window.wtkfApplyLanguage==='function') window.wtkfApplyLanguage(lang);
   }catch(e){}
 
