@@ -393,7 +393,7 @@
     applyLanguage(event.detail&&event.detail.code);
   });
   let saved='ko';
-  try{saved=localStorage.getItem('wtkf_lang')||'ko'}catch(e){}
+  try{saved=new URLSearchParams(location.search).get('lang')||localStorage.getItem('wtkf_lang')||'ko'}catch(e){}
   applyLanguage(saved);
 })();
 </script>
