@@ -225,8 +225,8 @@
 }
 .tk-hero h1 > span.tkg-unified-name{font-size:clamp(28px,5.15vw,78px);letter-spacing:-.055em;white-space:nowrap}
 
-/* WTKF brand lines: align Korean and English text widths without changing menu layout. */
-@media(min-width:701px){header.topbar .brand-text{width:172px!important;max-width:172px!important;flex:0 0 172px!important;overflow:visible!important}header.topbar .brand-text strong,header.topbar .brand-text span{display:block!important;width:100%!important;box-sizing:border-box!important;white-space:nowrap!important;text-align:justify!important;text-align-last:justify!important;overflow:visible!important}header.topbar .brand-text strong{font-size:14px!important;letter-spacing:normal!important}header.topbar .brand-text span{font-size:9px!important;letter-spacing:normal!important}}
+/* WTKF header brand: measured equal-width text on desktop. */
+@media(min-width:701px){header.topbar .brand-text{width:172px!important;min-width:172px!important;max-width:172px!important;flex:0 0 172px!important;overflow:visible!important}header.topbar .brand-text strong,header.topbar .brand-text span{display:block!important;width:172px!important;white-space:nowrap!important;overflow:visible!important;letter-spacing:normal!important}header.topbar .brand-text strong{font-size:14px!important}header.topbar .brand-text span{font-size:9px!important}}
 </style>
 </head>
 <body>
@@ -765,6 +765,29 @@
   observer.observe(document.body,{subtree:true,childList:true,characterData:true});
 })();
 
+</script>
+
+<script>
+/* Match the actual rendered widths of the two official brand lines, not their boxes. */
+(function(){
+ const box=document.querySelector('header.topbar .brand-text');if(!box)return;
+ const lines=[box.querySelector('strong'),box.querySelector('span')].filter(Boolean);
+ const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
+ let pending=false;
+ function align(){pending=false;const desktop=window.matchMedia('(min-width:701px)').matches;
+  for(const el of lines){el.style.removeProperty('letter-spacing');if(!desktop||!ctx)continue;
+   const text=(el.textContent||'').trim();if(text.length<2)continue;
+   const s=getComputedStyle(el);ctx.font=s.font;
+   const natural=ctx.measureText(text).width;
+   el.style.setProperty('letter-spacing',((172-natural)/(text.length-1)).toFixed(3)+'px','important');
+  }
+ }
+ function schedule(){if(!pending){pending=true;requestAnimationFrame(align)}}
+ window.addEventListener('resize',schedule,{passive:true});
+ const obs=new MutationObserver(schedule);for(const el of lines)obs.observe(el,{childList:true,characterData:true,subtree:true});
+ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(schedule);
+ schedule();
+})();
 </script>
 </body>
 </html>
