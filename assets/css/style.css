@@ -19,7 +19,7 @@
   border:1px solid rgba(215,179,91,.55);
   box-shadow:0 0 55px rgba(215,179,91,.16);
 }
-.tk-core.has-logo{background:radial-gradient(circle,#07111d 0 58%,#06111f 59%);overflow:visible}
+.tk-core.has-logo{background:transparent;overflow:visible;border-color:transparent;box-shadow:none}
 
 .nav{position:relative}
 .nav-item{position:relative}
