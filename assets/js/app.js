@@ -5,76 +5,63 @@
   const nav = document.querySelector('.nav');
   const toggle = document.querySelector('[data-nav-toggle]');
 
-  // WTKF v3.2.7: restore the mobile horizontal primary menu without changing
-  // the existing desktop mega menu or hamburger/full-menu behavior.
-  if(nav && !document.querySelector('.wtkf-mobile-primary')){
-    const strip = document.createElement('nav');
-    strip.className = 'wtkf-mobile-primary';
-    strip.setAttribute('aria-label','태권검도 모바일 주요 메뉴');
-    nav.querySelectorAll(':scope > .nav-item > a').forEach(a => {
-      const clone = a.cloneNode(true);
-      const source = a.getAttribute('data-wtkf-source');
-      if(source) clone.setAttribute('data-wtkf-source',source);
-      clone.classList.remove('pill');
-      strip.appendChild(clone);
+  // One shared seven-section navigation for desktop and mobile.
+  if(nav){
+    const root = new URL(document.querySelector('.brand').getAttribute('href') || './', location.href);
+    const href = path => new URL(path, root).href;
+    const groups = [
+      ['연맹소개', [['인사말','about/#message'],['창시자','founder/'],['연맹 역사','about/#history'],['창시철학','philosophy/']]],
+      ['태권검도', [['태권검도 소개','about/'],['기술체계','resources/#technique'],['기본베기법','media/#ap5uPE3pM-c']]],
+      ['교육·검법', [['교육과정','program/'],['검법','media/'],['지도자 교육','program/#instructor'],['승단심사','program/#test']]],
+      ['국제조직', [['세계 지부','branches/'],['임원·지도자','masters/'],['도장 네트워크','branches/#global']]],
+      ['자료·소식', [['공지사항','notice/'],['교본','resources/'],['공식자료','resources/#forms'],['뉴스·미디어','media/#event']]],
+      ['공식조회', [['단증 조회','verification/'],['자격 조회','verification/'],['등록 확인','verification/']]],
+      ['회원서비스', [['회원가입','https://acts.pe.kr/member-center/signup.html'],['로그인','member-login/'],['신청·문의','contact/'],['마이페이지','mypage/'],['회원 신청 안내','member/'],['통합 신청센터','https://ipma.kr/apply/']]]
+    ];
+    // Keep every previous destination, including page-specific menu links.
+    nav.querySelectorAll('a[href]').forEach(a => {
+      const url = new URL(a.getAttribute('href'), location.href);
+      if(groups.some(([,links]) => links.some(([,path]) => href(path) === url.href))) return;
+      const path = url.pathname.replace(root.pathname,'');
+      const group = /^(about|philosophy|founder)\//.test(path) ? 0 : /^program\//.test(path) ? 2 : /^(branches|masters)\//.test(path) ? 3 : /^(resources|media|notice)\//.test(path) ? 4 : /^verification\//.test(path) ? 5 : 6;
+      groups[group][1].push([a.getAttribute('data-wtkf-source') || a.textContent.trim(),url.href]);
     });
-    const header = document.querySelector('.topbar');
-    if(header) header.insertAdjacentElement('afterend', strip);
+    nav.replaceChildren(); nav.classList.add('wtkf-nav-seven'); nav.id='wtkf-primary-navigation';
+    const mq = matchMedia('(max-width:1050px)');
+    const close = item => {item.classList.remove('is-open');item.querySelector('button').setAttribute('aria-expanded','false');};
+    const closeAll = () => nav.querySelectorAll('.nav-item').forEach(close);
+    groups.forEach(([label, links], i) => {
+      const item=document.createElement('div');item.className='nav-item';
+      const button=document.createElement('button');button.type='button';button.className='wtkf-nav-heading';button.textContent=label;
+      button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls','wtkf-submenu-'+i);
+      const dd=document.createElement('div');dd.className='nav-dropdown';dd.id='wtkf-submenu-'+i;
+      links.forEach(([text,path]) => {const a=document.createElement('a');a.textContent=text;a.href=href(path);dd.appendChild(a);});
+      item.append(button,dd);nav.appendChild(item);
+      const open = () => {closeAll();item.classList.add('is-open');button.setAttribute('aria-expanded','true');};
+      button.addEventListener('click',()=>{const wasOpen=item.classList.contains('is-open');closeAll();if(!wasOpen)open();});
+      item.addEventListener('mouseenter',()=>{if(!mq.matches)open();});
+      item.addEventListener('mouseleave',()=>{if(!mq.matches)close(item);});
+      item.addEventListener('focusout',e=>{if(!item.contains(e.relatedTarget))close(item);});
+      button.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();open();dd.querySelector('a').focus();}});
+      dd.addEventListener('click',e=>{if(e.target.closest('a')&&mq.matches){closeAll();nav.classList.remove('mobile-open');syncToggle();}});
+    });
+    const syncToggle=()=>{if(toggle){const open=nav.classList.contains('mobile-open');toggle.textContent=open?'✕':'☰';toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');}};
+    if(toggle){toggle.setAttribute('aria-controls',nav.id);syncToggle();toggle.addEventListener('click',()=>{nav.classList.toggle('mobile-open');closeAll();syncToggle();});}
+    nav.addEventListener('keydown',e=>{if(e.key==='Escape'){const item=e.target.closest('.nav-item');closeAll();if(item)item.querySelector('button').focus();}});
+    document.addEventListener('click',e=>{if(!nav.contains(e.target)&&!toggle?.contains(e.target)){closeAll();nav.classList.remove('mobile-open');syncToggle();}});
+    mq.addEventListener('change',()=>{closeAll();nav.classList.remove('mobile-open');syncToggle();});
+    const style=document.createElement('style');style.textContent=`
+      .wtkf-nav-seven .wtkf-nav-heading{font:inherit;font-size:12px;font-weight:800;color:#dce5ed;background:transparent;border:0;padding:14px 11px;cursor:pointer;text-align:left;white-space:normal;line-height:1.5}
+      .wtkf-nav-seven .wtkf-nav-heading:after{content:'⌄';margin-left:7px;color:#d7b35b}
+      .wtkf-nav-seven .wtkf-nav-heading:focus-visible,.wtkf-nav-seven a:focus-visible{outline:2px solid #edc965;outline-offset:-3px}
+      .topbar .wtkf-nav-seven .nav-dropdown{display:none!important;box-sizing:border-box;background:#07182a!important;border-color:rgba(215,179,91,.3)!important;color:#dce5ed;opacity:1;visibility:visible;pointer-events:auto}
+      .topbar .wtkf-nav-seven .nav-item.is-open>.nav-dropdown{display:grid!important}
+      .topbar .wtkf-nav-seven .nav-dropdown a{white-space:normal!important;overflow-wrap:anywhere;background:rgba(255,255,255,.035)!important;border-color:rgba(215,179,91,.15)!important;color:#dce5ed!important;line-height:1.6!important}
+      .topbar .wtkf-nav-seven .nav-dropdown a:hover{background:rgba(215,179,91,.14)!important;color:#efc45f!important}
+      @media(min-width:1051px){.wtkf-nav-seven .wtkf-nav-heading{min-height:78px}.topbar .wtkf-nav-seven .nav-dropdown{top:100%!important;max-height:calc(100dvh - 100px);overflow:auto;grid-template-columns:repeat(4,minmax(0,1fr))}}
+      @media(max-width:1050px){.topbar .wtkf-nav-seven.mobile-open{max-height:calc(100dvh - 100px);overflow-y:auto;box-sizing:border-box;z-index:1300}.topbar .wtkf-nav-seven .nav-item{display:block;width:100%;min-width:0}.wtkf-nav-seven .wtkf-nav-heading{width:100%;min-height:44px;display:flex;justify-content:space-between}.topbar .wtkf-nav-seven .nav-dropdown{position:static!important;transform:none!important;min-width:0!important;width:100%!important;margin:0 0 8px;padding:8px!important;grid-template-columns:1fr;box-shadow:none!important}.topbar .wtkf-nav-seven .nav-dropdown:before{display:none}}
+    `;document.head.appendChild(style);
   }
-
-  if(toggle && nav){
-    toggle.addEventListener('click', () => {
-      nav.classList.toggle('mobile-open');
-      toggle.textContent = nav.classList.contains('mobile-open') ? '✕' : '☰';
-      if(!nav.classList.contains('mobile-open')){
-        nav.querySelectorAll('.mobile-open-item').forEach(x=>x.classList.remove('mobile-open-item'));
-      }
-    });
-  }
-
-  // Mobile: top-level links navigate directly. A separate disclosure button
-  // expands each submenu without intercepting the page link.
-  document.querySelectorAll('.nav-item').forEach(item => {
-    const a = item.querySelector(':scope > a');
-    const dd = item.querySelector(':scope > .nav-dropdown');
-    if(!a || !dd) return;
-    const disclosure = document.createElement('button');
-    disclosure.type = 'button';
-    disclosure.className = 'wtkf-submenu-toggle';
-    disclosure.setAttribute('aria-label', (a.textContent || '').trim() + ' submenu');
-    disclosure.setAttribute('aria-expanded', 'false');
-    disclosure.textContent = '▾';
-    disclosure.style.cssText = 'display:none;flex:0 0 34px;align-items:center;justify-content:center;min-height:36px;border:1px solid rgba(212,175,55,.45);border-radius:8px;background:transparent;color:#d4af37;cursor:pointer';
-    item.appendChild(disclosure);
-    disclosure.addEventListener('click', () => {
-      const open = !item.classList.contains('mobile-open-item');
-      nav.querySelectorAll('.mobile-open-item').forEach(x => {
-        x.classList.remove('mobile-open-item');
-        const btn = x.querySelector(':scope > .wtkf-submenu-toggle');
-        if(btn) btn.setAttribute('aria-expanded','false');
-      });
-      if(open) item.classList.add('mobile-open-item');
-      disclosure.setAttribute('aria-expanded',String(open));
-    });
-    const mq = window.matchMedia('(max-width: 1050px)');
-    const sync = () => {
-      disclosure.style.display = mq.matches ? 'inline-flex' : 'none';
-      if(mq.matches){
-        item.style.display = 'flex';
-        item.style.flexWrap = 'wrap';
-        a.style.flex = '1 1 auto';
-        dd.style.flexBasis = '100%';
-      } else {
-        item.style.display = '';
-        item.style.flexWrap = '';
-        a.style.flex = '';
-        dd.style.flexBasis = '';
-      }
-    };
-    sync();
-    if(mq.addEventListener) mq.addEventListener('change',sync);
-    else if(mq.addListener) mq.addListener(sync);
-  });
 
   // Progressive reveal
   const items = document.querySelectorAll('.card,.mini,.tk-feature,.year,.hq-panel,.doc,.banner,.wtkf-showcase');
@@ -136,25 +123,6 @@
     modal.querySelector('.wtkf-video-modal-frame').innerHTML='<iframe src="https://www.youtube.com/embed/'+encodeURIComponent(id)+'?autoplay=1&rel=0" title="'+title.replace(/"/g,'&quot;')+'" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
     modal.querySelector('.wtkf-video-modal-title').textContent=title;
     modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false'); document.body.classList.add('video-modal-open');
-  });
-})();
-
-// WTKF member application link: add to the sitewide 신청·문의 dropdown.
-(function(){
-  const brand = document.querySelector('.brand');
-  const root = brand ? (brand.getAttribute('href') || './') : './';
-  document.querySelectorAll('.nav-item').forEach(item => {
-    const top = item.querySelector(':scope > a');
-    const dd = item.querySelector(':scope > .nav-dropdown');
-    if(!top || !dd || !top.textContent.includes('신청·문의')) return;
-    if(dd.querySelector('[data-wtkf-member-link]')) return;
-    const link = document.createElement('a');
-    link.href = root + 'member/';
-    link.textContent = '회원가입';
-    link.setAttribute('data-wtkf-member-link','');
-    const title = dd.querySelector('.drop-title');
-    if(title && title.nextSibling) dd.insertBefore(link, title.nextSibling);
-    else dd.appendChild(link);
   });
 })();
 
