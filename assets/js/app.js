@@ -14,7 +14,7 @@
       ['태권검도', [['태권검도 소개','about/'],['기술체계','resources/#technique'],['기본베기법','media/#ap5uPE3pM-c']]],
       ['교육·검법', [['교육과정','program/'],['검법','media/'],['지도자 교육','program/#instructor'],['승단심사','program/#test']]],
       ['국제조직', [['세계 지부','branches/'],['임원·지도자','masters/'],['도장 네트워크','branches/#global']]],
-      ['자료·소식', [['공지사항','notice/'],['교본','resources/'],['공식자료','resources/#forms'],['뉴스·미디어','media/#event']]],
+      ['자료·소식', [['공지사항','notice/'],['교본','resources/'],['공식 검법 자료관','techniques/'],['공식자료','resources/#forms'],['뉴스·미디어','media/#event']]],
       ['공식조회', [['단증 조회','verification/'],['자격 조회','verification/'],['등록 확인','verification/']]],
       ['회원서비스', [['회원가입','https://acts.pe.kr/member-center/signup.html'],['로그인','member-login/'],['신청·문의','contact/'],['마이페이지','mypage/'],['회원 신청 안내','member/'],['통합 신청센터','https://ipma.kr/apply/']]]
     ];
