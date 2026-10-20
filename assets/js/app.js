@@ -167,7 +167,7 @@
   section.setAttribute('aria-label','태권검도 WORLD HUB LIVE 소개');
   section.innerHTML=`<div class="wtkfhub-wrap">
     <div class="wtkfhub-copy">
-      <div class="wtkfhub-livebar"><i class="wtkfhub-dot"></i> TAEKWON-GEOMDO WORLD HUB · LIVE</div>
+      <div class="wtkfhub-livebar"><i class="wtkfhub-dot"></i> TAEKWONKUMDO WORLD HUB · LIVE</div>
       <h1><span>TAEKWON</span><span>GEOMDO</span><em>태권도의 역동성 × 검도의 절제, 하나의 새로운 무도</em></h1>
       <p class="wtkfhub-lead">2009년 시작된 태권검도는 발차기와 검법을 단순히 섞는 것이 아니라, 거리·각도·타이밍·중심을 하나의 구조와 교차원리로 연결한 교육형 무도입니다. 처음 오셨다면 30초만 체험해 보세요.</p>
       <div class="wtkfhub-pills"><span>EST. 2009</span><span>교차원리</span><span>DISCIPLINE</span><span>RESPECT</span><span>HARMONY</span><span>GLOBAL EDUCATION</span></div>
@@ -207,7 +207,7 @@
   modal.className='wtkfhub-modal';
   modal.setAttribute('aria-hidden','true');
   modal.innerHTML=`<div class="wtkfhub-modalbox" role="dialog" aria-modal="true" aria-label="30초 태권검도 체험">
-    <div class="wtkfhub-modalhead"><div><small>30-SECOND TAEKWON-GEOMDO EXPERIENCE</small><h2>30초면 태권검도가 보입니다</h2></div><button class="wtkfhub-close" type="button" aria-label="닫기">×</button></div>
+    <div class="wtkfhub-modalhead"><div><small>30-SECOND TAEKWONKUMDO EXPERIENCE</small><h2>30초면 태권검도가 보입니다</h2></div><button class="wtkfhub-close" type="button" aria-label="닫기">×</button></div>
     <div class="wtkfhub-steps">
       <div class="wtkfhub-step"><span>1</span><div><strong>태권도의 역동성</strong><p>발차기·스텝·몸의 움직임을 통해 거리와 타이밍을 만듭니다.</p></div></div>
       <div class="wtkfhub-step"><span>2</span><div><strong>검도의 절제된 검법</strong><p>베기·막기·검의 선을 통해 정확한 각도와 중심을 익힙니다.</p></div></div>
