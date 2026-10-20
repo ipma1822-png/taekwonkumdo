@@ -176,13 +176,13 @@
       <div class="wtkfhub-pills"><span>EST. 2009</span><span>교차원리</span><span>DISCIPLINE</span><span>RESPECT</span><span>HARMONY</span><span>GLOBAL EDUCATION</span></div>
       <div class="wtkfhub-actions">
         <button class="wtkfhub-action primary" type="button" data-wtkfhub-tour><span>▶ 30초 태권검도 체험<small>처음 방문한 분은 여기부터</small></span><b>START</b></button>
-        <a class="wtkfhub-action showroom" href="./showroom/"><span>✦ SHOWROOM 통합관<small>TK01~TK10 · 상대에게 맞는 30~40초 체험 선택</small></span><b>OPEN</b></a>
+        
         <a class="wtkfhub-action" href="#wtkfhub-tech"><span>⚔ 기술 보기<small>공식 영상교육관으로</small></span><b>→</b></a>
         <a class="wtkfhub-action" href="./about/#history"><span>◎ 창시 이야기<small>2009년부터 이어진 역사</small></span><b>→</b></a>
         <a class="wtkfhub-action" href="#wtkfhub-network"><span>◉ 세계 네트워크<small>지부 · 도장 · 지도자</small></span><b>→</b></a>
         <a class="wtkfhub-action" href="./contact/"><span>＋ 지도자 · 지부 참여<small>교육 · 세미나 · 파트너십</small></span><b>→</b></a>
       </div>
-      <div class="wtkfhub-share"><button type="button" data-wtkfhub-share>↗ 이 페이지 공유</button><span class="wtkfhub-version">WORLD HUB v3.3.1 · SHOWROOM TK01~TK10 연결</span></div>
+      <div class="wtkfhub-share"><button type="button" data-wtkfhub-share>↗ 이 페이지 공유</button><span class="wtkfhub-version">WORLD HUB</span></div>
     </div>
     <div class="wtkfhub-visual" aria-hidden="true">
       <div class="wtkfhub-radar"></div><div class="wtkfhub-sweep"></div>
@@ -222,7 +222,7 @@
       <div class="wtkfhub-step"><span>4</span><div><strong>세계 어디서나 같은 교육</strong><p>품새·기본기술·지도자교육·공식조회까지 표준 시스템으로 이어집니다.</p></div></div>
     </div>
     <div class="wtkfhub-progress"><i></i></div>
-    <div class="wtkfhub-modalactions"><a href="./showroom/">SHOWROOM TK01~TK10 →</a><a href="#wtkfhub-tech">공식 기술영상 보기 →</a><a href="./program/">교육과정 보기 →</a><a href="./contact/">지도자 참여 →</a></div>
+    <div class="wtkfhub-modalactions"><a href="#wtkfhub-tech">공식 기술영상 보기 →</a><a href="./program/">교육과정 보기 →</a><a href="./contact/">지도자 참여 →</a></div>
   </div>`;
   document.body.appendChild(modal);
   let tourTimers=[];
