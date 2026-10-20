@@ -215,7 +215,7 @@
     </div>
     <div class="wtkfhub-visual" aria-hidden="true">
       <div class="wtkfhub-radar"></div><div class="wtkfhub-sweep"></div>
-      <div class="wtkfhub-emblem"><img src="./assets/img/wtkf-logo-main.png" alt=""><b>LIVE EMBLEM SYSTEM</b></div>
+      <div class="wtkfhub-emblem"><img src="./assets/img/%EB%B0%B0%EA%B2%BD%EC%97%86%EC%9D%8C.png" alt=""><b>LIVE EMBLEM SYSTEM</b></div>
       <div class="wtkfhub-node wtkfhub-n1"><b>PHILOSOPHY</b>창시철학 · 교차원리</div>
       <div class="wtkfhub-node wtkfhub-n2"><b>TRAINING</b>품새 · 기본기술 · 지도자</div>
       <div class="wtkfhub-node wtkfhub-n3"><b>GLOBAL</b>지부 · 국제 네트워크</div>
