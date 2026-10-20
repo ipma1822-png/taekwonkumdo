@@ -46,10 +46,26 @@
       dd.addEventListener('click',e=>{if(e.target.closest('a')&&mq.matches){closeAll();nav.classList.remove('mobile-open');syncToggle();}});
     });
     const syncToggle=()=>{if(toggle){const open=nav.classList.contains('mobile-open');toggle.textContent=open?'✕':'☰';toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');}};
-    if(toggle){toggle.setAttribute('aria-controls',nav.id);syncToggle();toggle.addEventListener('click',()=>{nav.classList.toggle('mobile-open');closeAll();syncToggle();});}
+    if(toggle){toggle.setAttribute('aria-controls',nav.id);syncToggle();toggle.addEventListener('click',closeAll);}
     nav.addEventListener('keydown',e=>{if(e.key==='Escape'){const item=e.target.closest('.nav-item');closeAll();if(item)item.querySelector('button').focus();}});
-    document.addEventListener('click',e=>{if(!nav.contains(e.target)&&!toggle?.contains(e.target)){closeAll();nav.classList.remove('mobile-open');syncToggle();}});
+    document.addEventListener('click',e=>{if(!nav.contains(e.target)&&!toggle?.contains(e.target)){closeAll();}});
     mq.addEventListener('change',()=>{closeAll();nav.classList.remove('mobile-open');syncToggle();});
+    // Keep the primary grid visible; the hamburger controls a separate drawer.
+    const drawer=nav.cloneNode(true);
+    drawer.id='wtkf-mobile-drawer';drawer.classList.add('wtkf-mobile-drawer');
+    drawer.setAttribute('aria-label','전체 메뉴');
+    drawer.querySelectorAll('[id]').forEach(el=>el.id+='-drawer');
+    drawer.querySelectorAll('[aria-controls]').forEach(el=>el.setAttribute('aria-controls',el.getAttribute('aria-controls')+'-drawer'));
+    nav.after(drawer);
+    const closeDrawer=()=>{drawer.classList.remove('mobile-open');drawer.querySelectorAll('.nav-item').forEach(close);if(toggle){toggle.textContent='☰';toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','메뉴 열기');}};
+    if(toggle){
+      toggle.setAttribute('aria-controls',drawer.id);
+      toggle.addEventListener('click',()=>{const open=drawer.classList.contains('mobile-open');closeDrawer();if(!open){drawer.classList.add('mobile-open');toggle.textContent='✕';toggle.setAttribute('aria-expanded','true');toggle.setAttribute('aria-label','메뉴 닫기');}});
+    }
+    drawer.addEventListener('click',e=>{const button=e.target.closest('.wtkf-nav-heading');if(button){const item=button.parentElement,open=item.classList.contains('is-open');drawer.querySelectorAll('.nav-item').forEach(close);if(!open){item.classList.add('is-open');button.setAttribute('aria-expanded','true');}}else if(e.target.closest('a'))closeDrawer();});
+    document.addEventListener('click',e=>{if(!drawer.contains(e.target)&&!toggle?.contains(e.target))closeDrawer();});
+    drawer.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();toggle?.focus();}});
+    mq.addEventListener('change',closeDrawer);
     window.wtkfLanguage?.translateMenu(nav);
     const style=document.createElement('style');style.textContent=`
       .wtkf-nav-seven .wtkf-nav-heading{font:inherit;font-size:12px;font-weight:800;color:#dce5ed;background:transparent;border:0;padding:14px 11px;cursor:pointer;text-align:left;white-space:normal;line-height:1.5}
@@ -62,6 +78,15 @@
       @media(min-width:1051px){.wtkf-nav-seven .wtkf-nav-heading{min-height:78px;font-size:clamp(10px,.85vw,12px);padding-inline:8px;overflow-wrap:normal;word-break:normal}.topbar .wtkf-nav-seven{flex:1 1 auto;min-width:0}.topbar .wtkf-nav-seven .nav-item{flex:1 1 auto;min-width:min-content}.topbar>.brand .brand-text{max-width:230px;white-space:normal}.topbar .wtkf-nav-seven .wtkf-nav-heading{width:100%}.topbar .wtkf-nav-seven .nav-dropdown{top:100%!important;max-height:calc(100dvh - 100px);overflow:auto;grid-template-columns:repeat(4,minmax(0,1fr))}}
       @media(min-width:1051px) and (max-width:1250px){.topbar>.brand .brand-text{max-width:160px}.topbar>.brand .brand-text strong{font-size:11px}.wtkf-nav-seven .wtkf-nav-heading{font-size:10px;padding-inline:6px}}
       @media(max-width:1050px){.topbar .wtkf-nav-seven.mobile-open{max-height:calc(100dvh - 100px);overflow-y:auto;box-sizing:border-box;z-index:1300}.topbar .wtkf-nav-seven .nav-item{display:block;width:100%;min-width:0}.wtkf-nav-seven .wtkf-nav-heading{width:100%;min-height:44px;display:flex;justify-content:space-between}.topbar .wtkf-nav-seven .nav-dropdown{position:static!important;transform:none!important;min-width:0!important;width:100%!important;margin:0 0 8px;padding:8px!important;grid-template-columns:1fr;box-shadow:none!important}.topbar .wtkf-nav-seven .nav-dropdown:before{display:none}}
+
+      .topbar .wtkf-mobile-drawer{display:none!important}
+      @media(max-width:1050px){
+        header.topbar{flex-wrap:wrap!important}
+        header.topbar>nav#wtkf-primary-navigation{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));order:10;flex:0 0 100%;width:100%;margin:0;padding:6px 0;gap:4px;position:relative;left:auto;right:auto;top:auto;overflow:visible;box-sizing:border-box}
+        #wtkf-primary-navigation .wtkf-nav-heading{align-items:center;min-width:0;padding:10px 7px;overflow-wrap:anywhere;word-break:normal;height:100%;border:1px solid rgba(215,179,91,.22);border-radius:9px}
+        #wtkf-primary-navigation .nav-item.is-open>.nav-dropdown{position:absolute!important;top:100%!important;left:0!important;right:0!important;z-index:1301;max-height:45dvh;overflow-y:auto;grid-template-columns:repeat(2,minmax(0,1fr));margin:0}
+        header.topbar>nav.wtkf-mobile-drawer.mobile-open{display:flex!important;position:absolute;left:10px;right:10px;top:100%;width:auto;margin:0;z-index:1302;max-height:60dvh;overflow-y:auto}
+      }
     `;document.head.appendChild(style);
   }
 
