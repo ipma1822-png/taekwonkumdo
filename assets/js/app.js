@@ -171,7 +171,7 @@
   section.innerHTML=`<div class="wtkfhub-wrap">
     <div class="wtkfhub-copy">
       <div class="wtkfhub-livebar"><i class="wtkfhub-dot"></i> TAEKWONKUMDO WORLD HUB · LIVE</div>
-      <h1><span class="wtkfhub-brand" data-wtkf-brand>TAEKWONKUMDO</span><em>태권도의 역동성 × 검도의 절제, 하나의 새로운 무도</em></h1>
+      <h1><span class="wtkfhub-brand" data-wtkf-brand>TAEKWONKUMDO</span><em>태권도의 역동성 + 검도의 절제, 하나의 새로운 무도</em></h1>
       <p class="wtkfhub-lead">2009년 시작된 태권검도는 발차기와 검법을 단순히 섞는 것이 아니라, 거리·각도·타이밍·중심을 하나의 구조와 교차원리로 연결한 교육형 무도입니다. 처음 오셨다면 30초만 체험해 보세요.</p>
       <div class="wtkfhub-pills"><span>EST. 2009</span><span>교차원리</span><span>DISCIPLINE</span><span>RESPECT</span><span>HARMONY</span><span>GLOBAL EDUCATION</span></div>
       <div class="wtkfhub-actions">
