@@ -12,7 +12,7 @@
     const groups = [
       ['연맹소개', [['인사말','about/#message'],['창시자','founder/'],['연맹 역사','about/#history'],['창시철학','philosophy/']]],
       ['태권검도', [['태권검도 소개','about/'],['기술체계','resources/#technique'],['기본베기법','media/#ap5uPE3pM-c']]],
-      ['교육·검법', [['교육과정','program/'],['검법','media/'],['지도자 교육','program/#instructor'],['승단심사','program/#test']]],
+      ['교육·검법', [['📖 태권검도 공식 교본 보기','techniques/'],['교육과정','program/'],['검법','media/'],['지도자 교육','program/#instructor'],['승단심사','program/#test']]],
       ['국제조직', [['세계 지부','branches/'],['임원·지도자','masters/'],['도장 네트워크','branches/#global']]],
       ['자료·소식', [['공지사항','notice/'],['교본','resources/'],['공식 검법 자료관','techniques/'],['공식자료','resources/#forms'],['뉴스·미디어','media/#event']]],
       ['공식조회', [['단증 조회','verification/'],['자격 조회','verification/'],['등록 확인','verification/']]],
